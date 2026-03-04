@@ -18,14 +18,14 @@
 - Файл: `C1-mvp-ecommerce.puml`
 - Изображение:
 
-![C1 MVP](./C1-mvp-ecommerce.png)
+![C1 MVP](./C1_MVP_Ecommerce.png)
 
 ### C2 — Контейнеры
 
 - Файл: `C2-mvp-ecommerce.puml`
 - Изображение:
 
-![C2 MVP](./C2-mvp-ecommerce.png)
+![C2 MVP](./C2_MVP_Ecommerce.png)
 
 ---
 
@@ -43,7 +43,7 @@
 - Файл: `C2-platform-ecommerce.puml`
 - Изображение:
 
-![C2 Platform](./C2-platform-ecommerce.png)
+![C2 Platform](./C2_Platform_Ecommerce.png)
 
 ---
 
@@ -54,7 +54,7 @@
 - Файл: `C2-transitional-ecommerce.puml`
 - Изображение:
 
-![C2 Transitional](./C2-transitional-ecommerce.png)
+![C2 Transitional](./C2_Transitional_Ecommerce.png)
 
 ---
 
