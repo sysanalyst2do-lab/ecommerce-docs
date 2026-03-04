@@ -1,0 +1,28 @@
+@startuml C1_MVP_Ecommerce
+!include https://raw.githubusercontent.com/plantuml-stdlib/C4-PlantUML/master/C4_Context.puml
+
+LAYOUT_WITH_LEGEND()
+
+Person(customer, "Покупатель", "Ищет товары, оформляет заказы, управляет личным кабинетом")
+Person(operator, "Оператор / Администратор", "Обрабатывает заказы, управляет каталогом, акциями")
+Person(support, "Поддержка", "Обрабатывает обращения клиентов")
+
+System_Boundary(ecom_mvp, "E-commerce Platform (MVP)") {
+  System(ecom_system, "E-commerce System", "Витрина, корзина, заказы, личный кабинет, админка")
+}
+
+System_Ext(payment, "Платёжный провайдер", "Обработка онлайн‑платежей")
+System_Ext(notification, "Провайдер уведомлений", "Email/SMS/мессенджеры")
+System_Ext(erp, "ERP / складской учёт", "Источник/получатель данных по остаткам (опционально)")
+System_Ext(crm, "CRM / Helpdesk", "Управление клиентами и обращениями (опционально)")
+
+Rel(customer, ecom_system, "Ищет товары, формирует корзину, оформляет заказы", "HTTPS/Web")
+Rel(operator, ecom_system, "Управление каталогом, заказами, акциями", "HTTPS/Web")
+Rel(support, ecom_system, "Просмотр заказов, обработка обращений", "HTTPS/Web")
+
+Rel(ecom_system, payment, "Создание и подтверждение платежей", "HTTPS/REST")
+Rel(ecom_system, notification, "Отправка писем и SMS по событию", "HTTPS/SMTP/REST")
+Rel(ecom_system, erp, "Обмен данными по остаткам/заказам (опционально)", "Batch/REST")
+Rel(ecom_system, crm, "Обмен данными по клиентам и обращениям (опционально)", "Batch/REST")
+
+@enduml

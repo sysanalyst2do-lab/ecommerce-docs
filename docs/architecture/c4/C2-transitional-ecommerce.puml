@@ -1,0 +1,73 @@
+@startuml C2_Transitional_Ecommerce
+!include https://raw.githubusercontent.com/plantuml-stdlib/C4-PlantUML/master/C4_Container.puml
+
+LAYOUT_WITH_LEGEND()
+
+Person(customer, "Покупатель")
+Person(operator, "Оператор / Администратор")
+Person(warehouse, "Сотрудник склада")
+Person(marketing, "Маркетолог")
+Person(support, "Поддержка")
+
+System_Boundary(ecom_transitional, "E-commerce Platform (переходный вариант)") {
+
+  Container(frontend, "Web Frontend", "React", "SPA для покупателей и внутренних пользователей")
+
+  Container(api_monolith, "E-commerce Backend", "Python (монолит)", "Каталог, корзина, заказы, маркетинг, аккаунты, поддержка")
+
+  ContainerDb(pg_main, "Main Database", "PostgreSQL", "Основные транзакционные данные (разделение по схемам)")
+  ContainerDb(search, "Search DB", "Elasticsearch / OpenSearch", "Поисковый индекс товаров")
+
+  ContainerQueue(kafka, "Kafka Cluster", "Apache Kafka", "Событийный обмен внутри платформы и с внешними системами")
+
+  Container(pay_int, "Payment Integration Service", "Python", "Интеграция с платёжными провайдерами, обработка статусов")
+  Container(notif_svc, "Notification Service", "Python", "Отправка email/SMS/сообщений по событиям")
+  Container(erp_int, "ERP Integration Service", "Python", "Синхронизация остатков/заказов с ERP")
+  Container(crm_int, "CRM Integration Service", "Python", "Синхронизация клиентов/обращений с CRM/Helpdesk")
+}
+
+System_Ext(payment, "Платёжный провайдер", "")
+System_Ext(delivery, "Службы доставки", "")
+System_Ext(notification, "Провайдер уведомлений", "")
+System_Ext(erp, "ERP / система управления запасами", "")
+System_Ext(crm, "CRM / Helpdesk", "")
+
+' Пользователи
+Rel(customer, frontend, "Использует", "HTTPS")
+Rel(operator, frontend, "Использует", "HTTPS")
+Rel(warehouse, frontend, "Использует", "HTTPS")
+Rel(marketing, frontend, "Использует", "HTTPS")
+Rel(support, frontend, "Использует", "HTTPS")
+
+' Фронт → монолит
+Rel(frontend, api_monolith, "REST/JSON", "HTTPS")
+
+' Монолит → БД/поиск
+Rel(api_monolith, pg_main, "Чтение/запись", "SQL")
+Rel(api_monolith, search, "Поиск/индексация товаров", "HTTP/REST")
+
+' Монолит → Kafka (события домена)
+Rel(api_monolith, kafka, "Публикует доменные события (order.*, product.*, customer.*)", "Kafka topics")
+Rel(kafka, api_monolith, "Опционально: потребляет события, инициированные интеграциями", "Kafka topics")
+
+' Монолит ↔ платёжный сервис
+Rel(api_monolith, pay_int, "Запросы на оплату (order.payment.requested)", "Kafka / REST")
+Rel(pay_int, kafka, "Публикует статусы платежей (order.payment.*)", "Kafka topics")
+Rel(pay_int, payment, "Интеграция с платёжным провайдером", "HTTPS/REST")
+
+' Доставка
+Rel(api_monolith, delivery, "Создание/обновление заявок на доставку", "HTTPS/REST")
+
+' Уведомления
+Rel(kafka, notif_svc, "События заказов/клиентов/маркетинга", "Kafka topics")
+Rel(notif_svc, notification, "Отправка email/SMS/сообщений", "HTTPS/REST/SMTP")
+
+' ERP интеграция
+Rel(kafka, erp_int, "События по товарам, остаткам, заказам", "Kafka topics")
+Rel(erp_int, erp, "Синхронизация с ERP", "HTTPS/REST/Batch")
+
+' CRM интеграция
+Rel(kafka, crm_int, "События по клиентам и обращениям", "Kafka topics")
+Rel(crm_int, crm, "Синхронизация с CRM/Helpdesk", "HTTPS/REST")
+
+@enduml

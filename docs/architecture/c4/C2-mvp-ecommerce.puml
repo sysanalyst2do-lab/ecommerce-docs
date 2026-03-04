@@ -1,0 +1,31 @@
+@startuml C2_MVP_Ecommerce
+!include https://raw.githubusercontent.com/plantuml-stdlib/C4-PlantUML/master/C4_Container.puml
+
+LAYOUT_WITH_LEGEND()
+
+Person(customer, "Покупатель")
+Person(operator, "Оператор / Администратор")
+Person(support, "Поддержка")
+
+System_Boundary(ecom_mvp, "E-commerce Platform (MVP)") {
+  Container(frontend, "Web Frontend", "React", "Витрина, корзина, личный кабинет, админ‑интерфейсы")
+  Container(api, "Backend Application", "Python (FastAPI/Django)", "Бизнес‑логика: каталог, корзина, заказы, маркетинг, аккаунты, поддержка")
+  ContainerDb(pg, "Main Database", "PostgreSQL", "Транзакционные данные: пользователи, товары, заказы, акции, обращения")
+  ContainerDb(search, "Search Database", "Elasticsearch / OpenSearch", "Поисковый индекс товаров для быстрого поиска и фильтрации")
+}
+
+System_Ext(payment, "Платёжный провайдер", "Обработка онлайн‑платежей")
+System_Ext(notification, "Провайдер уведомлений", "Email/SMS/мессенджеры")
+
+Rel(customer, frontend, "Использует", "HTTPS")
+Rel(operator, frontend, "Использует", "HTTPS")
+Rel(support, frontend, "Использует", "HTTPS")
+
+Rel(frontend, api, "REST/JSON API", "HTTPS")
+Rel(api, pg, "Чтение/запись данных", "SQL")
+Rel(api, search, "Поиск/индексация товаров", "HTTP/REST")
+
+Rel(api, payment, "Создание/проверка платежей", "HTTPS/REST")
+Rel(api, notification, "Отправка писем/SMS по событиям (заказы, регистрация)", "HTTPS/SMTP/REST")
+
+@enduml

@@ -1,0 +1,100 @@
+@startuml C2_Platform_Ecommerce
+!include https://raw.githubusercontent.com/plantuml-stdlib/C4-PlantUML/master/C4_Container.puml
+
+LAYOUT_WITH_LEGEND()
+
+Person(customer, "Покупатель")
+Person(operator, "Оператор / Администратор")
+Person(warehouse, "Сотрудник склада")
+Person(marketing, "Маркетолог")
+Person(support, "Поддержка")
+
+System_Boundary(ecom_platform, "E-commerce Platform") {
+
+  Container(frontend, "Web Frontend", "React", "SPA для покупателей и внутренних пользователей")
+  Container(bff, "API Gateway / BFF", "Python", "Агрегация и маршрутизация запросов к доменным сервисам")
+
+  Container_Boundary(services, "Domain Services (Python)") {
+    Container(cat_svc, "Catalog Service", "Python", "Каталог, карточки, категории, индексация в поиске")
+    Container(ord_svc, "Order Service", "Python", "Корзина, оформление заказов, статусы, отмены, возвраты")
+    Container(cust_svc, "Customer Service", "Python", "Аккаунты, профили, адреса, настройки уведомлений")
+    Container(inv_svc, "Inventory Service", "Python", "Остатки, склады, резервирование")
+    Container(mkt_svc, "Marketing Service", "Python", "Акции, скидки, промокоды, персонализация")
+    Container(sup_svc, "Support Service", "Python", "Обращения, жалобы, связь с CRM/Helpdesk")
+  }
+
+  ContainerDb(pg_cat, "Catalog DB", "PostgreSQL", "Данные каталога")
+  ContainerDb(pg_ord, "Order DB", "PostgreSQL", "Заказы и корзины")
+  ContainerDb(pg_cust, "Customer DB", "PostgreSQL", "Клиенты, профили, адреса")
+  ContainerDb(pg_inv, "Inventory DB", "PostgreSQL", "Остатки, склады")
+  ContainerDb(pg_mkt, "Marketing DB", "PostgreSQL", "Акции, промокоды, кампании")
+  ContainerDb(pg_sup, "Support DB", "PostgreSQL", "Обращения, кейсы")
+
+  ContainerDb(search, "Search DB", "Elasticsearch / OpenSearch", "Поисковый индекс товаров")
+
+  ContainerQueue(kafka, "Kafka Cluster", "Apache Kafka", "Событийный обмен данными между сервисами и внешними системами")
+
+  Container(pay_int, "Payment Integration Service", "Python", "Интеграция с платёжными провайдерами, обработка статусов платежей")
+  Container(notif_svc, "Notification Service", "Python", "Отправка email/SMS/сообщений по событиям")
+  Container(erp_int, "ERP Integration Service", "Python", "Синхронизация товаров и остатков с ERP")
+  Container(crm_int, "CRM Integration Service", "Python", "Синхронизация клиентов и обращений с CRM/Helpdesk")
+}
+
+System_Ext(payment, "Платёжный провайдер", "")
+System_Ext(delivery, "Службы доставки", "")
+System_Ext(notification, "Провайдер уведомлений", "")
+System_Ext(erp, "ERP / система управления запасами", "")
+System_Ext(crm, "CRM / Helpdesk", "")
+
+' Взаимодействия пользователей
+Rel(customer, frontend, "Использует", "HTTPS")
+Rel(operator, frontend, "Использует", "HTTPS")
+Rel(warehouse, frontend, "Использует", "HTTPS")
+Rel(marketing, frontend, "Использует", "HTTPS")
+Rel(support, frontend, "Использует", "HTTPS")
+
+Rel(frontend, bff, "REST/JSON", "HTTPS")
+
+' BFF → доменные сервисы
+Rel(bff, cat_svc, "REST/JSON", "HTTPS")
+Rel(bff, ord_svc, "REST/JSON", "HTTPS")
+Rel(bff, cust_svc, "REST/JSON", "HTTPS")
+Rel(bff, inv_svc, "REST/JSON", "HTTPS")
+Rel(bff, mkt_svc, "REST/JSON", "HTTPS")
+Rel(bff, sup_svc, "REST/JSON", "HTTPS")
+
+' Сервисы → БД
+Rel(cat_svc, pg_cat, "Чтение/запись", "SQL")
+Rel(cat_svc, search, "Индексация/поиск товаров", "HTTP/REST")
+
+Rel(ord_svc, pg_ord, "Чтение/запись", "SQL")
+Rel(cust_svc, pg_cust, "Чтение/запись", "SQL")
+Rel(inv_svc, pg_inv, "Чтение/запись", "SQL")
+Rel(mkt_svc, pg_mkt, "Чтение/запись", "SQL")
+Rel(sup_svc, pg_sup, "Чтение/запись", "SQL")
+
+' Событийное взаимодействие через Kafka
+Rel(cat_svc, kafka, "Публикует события о товарах (product.*)", "Kafka topics")
+Rel(inv_svc, kafka, "Публикует/читает события об остатках (inventory.*)", "Kafka topics")
+Rel(ord_svc, kafka, "Публикует/читает события о заказах (order.*)", "Kafka topics")
+Rel(cust_svc, kafka, "Публикует события о клиентах (customer.*)", "Kafka topics")
+Rel(mkt_svc, kafka, "Потребляет события для аналитики/персонализации", "Kafka topics")
+Rel(sup_svc, kafka, "Публикует/читает события обращений (support.*)", "Kafka topics")
+
+' Интеграционные сервисы и внешние системы
+Rel(ord_svc, pay_int, "Создание запросов на оплату (order.payment.requested)", "Kafka / REST")
+Rel(pay_int, kafka, "Публикует статусы оплат (order.payment.*)", "Kafka topics")
+Rel(pay_int, payment, "Интеграция с платёжными провайдерами", "HTTPS/REST")
+
+Rel(kafka, notif_svc, "События заказов/клиентов/маркетинга", "Kafka topics")
+Rel(notif_svc, notification, "Отправка email/SMS/сообщений", "HTTPS/REST/SMTP")
+
+Rel(kafka, erp_int, "События по товарам, остаткам, заказам", "Kafka topics")
+Rel(erp_int, erp, "Синхронизация с ERP", "HTTPS/REST/Batch")
+
+Rel(kafka, crm_int, "События по клиентам и обращениям", "Kafka topics")
+Rel(crm_int, crm, "Синхронизация с CRM / Helpdesk", "HTTPS/REST")
+
+Rel(ord_svc, delivery, "Создание и обновление заявок на доставку", "HTTPS/REST")
+
+@enduml

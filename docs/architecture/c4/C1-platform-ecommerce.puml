@@ -1,0 +1,34 @@
+@startuml C1_Platform_Ecommerce
+!include https://raw.githubusercontent.com/plantuml-stdlib/C4-PlantUML/master/C4_Context.puml
+
+LAYOUT_WITH_LEGEND()
+
+Person(customer, "Покупатель")
+Person(operator, "Оператор / Администратор")
+Person(warehouse, "Сотрудник склада")
+Person(marketing, "Маркетолог")
+Person(support, "Поддержка")
+
+System_Boundary(ecom_platform, "E-commerce Platform (масштабируемая)") {
+  System(ecom_core, "E-commerce Core", "Набор доменных сервисов: каталог, заказы, клиенты, маркетинг, запасы, поддержка")
+}
+
+System_Ext(payment, "Платёжный провайдер", "Онлайн‑платежи")
+System_Ext(delivery, "Службы доставки", "Доставка заказов")
+System_Ext(notification, "Провайдер уведомлений", "Email/SMS/мессенджеры")
+System_Ext(erp, "ERP / система управления запасами", "Остатки, закупки")
+System_Ext(crm, "CRM / Helpdesk", "Клиенты и обращения")
+
+Rel(customer, ecom_core, "Ищет товары, оформляет заказы, управляет кабинетом", "HTTPS/Web/API")
+Rel(operator, ecom_core, "Управляeт каталогом, заказами, акциями", "HTTPS/Web/API")
+Rel(warehouse, ecom_core, "Просматривает и обрабатывает заказы/отправки", "HTTPS/Web/API")
+Rel(marketing, ecom_core, "Настраивает акции, анализирует эффективность", "HTTPS/Web/API")
+Rel(support, ecom_core, "Работает с обращениями и заказами клиентов", "HTTPS/Web/API")
+
+Rel(ecom_core, payment, "Обработка платежей", "HTTPS/REST")
+Rel(ecom_core, delivery, "Обмен данными по доставкам (заказы, статусы)", "HTTPS/REST")
+Rel(ecom_core, notification, "Отправка уведомлений по событиям", "HTTPS/REST/SMTP")
+Rel(ecom_core, erp, "Синхронизация товаров и остатков", "Async via Kafka/REST")
+Rel(ecom_core, crm, "Синхронизация клиентов и обращений", "Async via Kafka/REST")
+
+@enduml
