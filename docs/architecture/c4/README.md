@@ -36,7 +36,7 @@
 - Файл: `C1-platform-ecommerce.puml`
 - Изображение:
 
-![C1 Platform](./C1-platform-ecommerce.png)
+![C1 Platform](./C1_Platform_Ecommerce.png)
 
 ### C2 — Контейнеры
 
