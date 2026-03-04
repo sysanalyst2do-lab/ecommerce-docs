@@ -2,8 +2,7 @@ name: Generate PlantUML diagrams
 
 on:
   push:
-    paths:
-      - 'docs/architecture/c4/**/*.puml'
+    branches: [ main ]
   workflow_dispatch: {}
 
 jobs:
@@ -21,6 +20,11 @@ jobs:
         with:
           distribution: 'temurin'
           java-version: '17'
+
+      - name: Install Graphviz
+        run: |
+          sudo apt-get update
+          sudo apt-get install -y graphviz
 
       - name: Download PlantUML jar
         run: |
