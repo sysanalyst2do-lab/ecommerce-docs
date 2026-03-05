@@ -1,0 +1,27 @@
+@startuml
+title Диаграмма последовательности. Сценарий "Отслеживание статуса заказа клиентом"
+autonumber
+
+actor Customer as C
+participant "Web UI" as UI
+participant "Order API" as ORD_API
+participant "Order Service" as ORD
+participant "Shipment Provider" as SHIP
+
+C -> UI : Открывает страницу "Мои заказы"
+UI -> ORD_API : GET /my/orders
+ORD_API -> ORD : findOrdersByCustomer(customerId)
+ORD --> ORD_API : orders list
+ORD_API --> UI : orders list
+
+C -> UI : Выбирает заказ для просмотра
+UI -> ORD_API : GET /orders/{orderId}
+ORD_API -> ORD : getOrderWithHistory(orderId)
+ORD --> ORD_API : order, statusHistory, shipments
+ORD_API --> UI : order details
+
+opt external tracking
+UI -> SHIP : Open tracking URL
+end
+
+@enduml

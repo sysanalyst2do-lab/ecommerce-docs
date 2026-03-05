@@ -1,0 +1,44 @@
+@startuml
+autonumber
+
+actor "Покупатель" as C
+participant "Web UI" as UI
+participant "Checkout API" as CHK
+participant "Cart Service" as CART
+participant "Order Service" as ORD
+participant "Payment Gateway Adapter" as PAY
+participant "Inventory Service" as INV
+participant "Notification Service" as NOTIF
+
+C -> UI : Открыть корзину / оформление заказа
+UI -> CART : GET /cart
+CART --> UI : Данные корзины
+
+C -> UI : Заполнить форму оформления заказа\n(доставка и оплата)
+UI -> CHK : POST /checkout/init\n(cartId, delivery, payment, customerData)
+CHK -> CART : GET cart
+CART --> CHK : Позиции корзины
+
+CHK -> INV : Зарезервировать товары\n(позиции корзины)
+INV --> CHK : Результат резервирования (ok/fail)
+
+alt Резервирование успешно
+  CHK -> PAY : Инициировать платеж\n(сумма, черновик заказа)
+  PAY --> CHK : Результат платежа (authorized/failed)
+
+  alt Платеж авторизован
+    CHK -> ORD : Создать заказ\n(корзина, клиент, платеж, доставка)
+    ORD --> CHK : orderId, orderNumber
+
+    CHK -> NOTIF : Отправить подтверждение заказа\n(клиент, orderNumber)
+    NOTIF --> CHK : ack
+
+    CHK --> UI : Успешное оформление\n(номер заказа, статус)
+  else Платеж отклонён
+    CHK --> UI : Ошибка оплаты\n(payment failed)
+  end
+else Резервирование неуспешно
+  CHK --> UI : Ошибка оформления\n(недостаточно товара на складе)
+end
+
+@enduml

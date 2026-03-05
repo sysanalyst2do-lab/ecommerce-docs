@@ -1,0 +1,44 @@
+name: Generate UML PlantUML diagrams
+
+on:
+  push:
+    branches: [ main ]
+  workflow_dispatch: {}
+
+jobs:
+  render-uml-plantuml:
+    runs-on: ubuntu-latest
+
+    steps:
+      - name: Checkout repository
+        uses: actions/checkout@v4
+        with:
+          fetch-depth: 0
+
+      - name: Set up Java
+        uses: actions/setup-java@v4
+        with:
+          distribution: 'temurin'
+          java-version: '17'
+
+      - name: Install Graphviz
+        run: |
+          sudo apt-get update
+          sudo apt-get install -y graphviz
+
+      - name: Download PlantUML jar
+        run: |
+          curl -L -o plantuml.jar https://github.com/plantuml/plantuml/releases/latest/download/plantuml.jar
+
+      - name: Generate PNG diagrams from .puml (UML)
+        run: |
+          find docs/04-design/uml -name "*.puml" -print0 | while IFS= read -r -d '' file; do
+            echo "Rendering $file"
+            java -jar plantuml.jar -tpng "$file"
+          done
+
+      - name: Commit and push generated UML diagrams
+        uses: stefanzweifel/git-auto-commit-action@v5
+        with:
+          commit_message: "chore(plantuml): update UML diagrams"
+          file_pattern: "docs/04-design/uml/*.png"

@@ -4,7 +4,7 @@
 - Статус: Accepted
 - Автор: <твоё имя>
 - Связанные артефакты:
-    - C4: `docs/architecture/c4/C1-mvp-ecommerce.puml`, `C2-mvp-ecommerce.puml`,
+    - C4: `docs/03-architecture/c4/C1-mvp-ecommerce.puml`, `C2-mvp-ecommerce.puml`,
       `C1-platform-ecommerce.puml`, `C2-platform-ecommerce.puml`
     - Требования:
         - BR: BR-CAT-01..05, BR-CRT-01..03, BR-CHK-01..06, BR-ORD-01..05,

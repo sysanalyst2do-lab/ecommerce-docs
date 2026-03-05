@@ -4,8 +4,8 @@
 - Статус: Accepted
 - Автор: <твоё имя>
 - Связанные артефакты:
-    - C4: `docs/architecture/c4/C2-transitional-ecommerce.puml`,
-      `docs/architecture/c4/C2-platform-ecommerce.puml`
+    - C4: `docs/03-architecture/c4/C2-transitional-ecommerce.puml`,
+      `docs/03-architecture/c4/C2-platform-ecommerce.puml`
     - Требования:
         - BR: BR-ORD-01..04, BR-INV-01..03, BR-MKT-01..04, BR-SUP-01..03, BR-CLI-01..03, BR-XBUS-02..03
         - SR: SR-ORD-01..08, SR-INV-01..04, SR-MKT-01..05, SR-SUP-04..05, SR-CLI-01..04

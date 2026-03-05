@@ -1,0 +1,236 @@
+@startuml
+' Пакеты по доменам
+
+package "Catalog" {
+  class Product {
+    +id: UUID
+    +name: String
+    +description: Text
+    +status: ProductStatus
+  }
+
+  class Category {
+    +id: UUID
+    +name: String
+    +parentId: UUID
+  }
+
+  class Sku {
+    +id: UUID
+    +code: String
+    +attributes: Map
+  }
+
+  class Price {
+    +id: UUID
+    +amount: Decimal
+    +currency: String
+    +validFrom: DateTime
+    +validTo: DateTime
+  }
+
+  enum ProductStatus {
+    ACTIVE
+    HIDDEN
+    DISCONTINUED
+  }
+
+  Product "1" -- "0..*" Sku
+  Product "1" -- "0..*" Price
+  Category "1" -- "0..*" Product
+  Category "0..1" -down- "0..*" Category : parent
+}
+
+package "Inventory" {
+  class InventoryItem {
+    +id: UUID
+    +skuId: UUID
+    +locationId: UUID
+    +availableQty: Int
+    +reservedQty: Int
+  }
+
+  class Location {
+    +id: UUID
+    +type: LocationType
+    +name: String
+  }
+
+  enum LocationType {
+    WAREHOUSE
+    PICKUP_POINT
+    STORE
+  }
+
+  Sku "1" -- "0..*" InventoryItem
+  Location "1" -- "0..*" InventoryItem
+}
+
+package "Customer" {
+  class Customer {
+    +id: UUID
+    +email: String
+    +phone: String
+    +createdAt: DateTime
+  }
+
+  class CustomerProfile {
+    +id: UUID
+    +firstName: String
+    +lastName: String
+    +birthDate: Date?
+  }
+
+  class Address {
+    +id: UUID
+    +customerId: UUID
+    +label: String
+    +city: String
+    +street: String
+    +zip: String
+    +isDefault: Boolean
+  }
+
+  Customer "1" -- "1" CustomerProfile
+  Customer "1" -- "0..*" Address
+}
+
+package "Cart" {
+  class Cart {
+    +id: UUID
+    +customerId: UUID?
+    +sessionId: String?
+    +createdAt: DateTime
+    +updatedAt: DateTime
+  }
+
+  class CartItem {
+    +id: UUID
+    +cartId: UUID
+    +skuId: UUID
+    +quantity: Int
+    +unitPrice: Decimal
+  }
+
+  Cart "1" -- "0..*" CartItem
+  Sku "1" -- "0..*" CartItem
+  Customer "0..1" -- "0..*" Cart
+}
+
+package "Order" {
+  class Order {
+    +id: UUID
+    +orderNumber: String
+    +customerId: UUID?
+    +status: OrderStatus
+    +createdAt: DateTime
+    +totalAmount: Decimal
+    +currency: String
+  }
+
+  class OrderItem {
+    +id: UUID
+    +orderId: UUID
+    +skuId: UUID
+    +quantity: Int
+    +unitPrice: Decimal
+    +discountAmount: Decimal
+  }
+
+  class Shipment {
+    +id: UUID
+    +orderId: UUID
+    +method: String
+    +status: ShipmentStatus
+    +trackingNumber: String?
+  }
+
+  class Payment {
+    +id: UUID
+    +orderId: UUID
+    +provider: String
+    +status: PaymentStatus
+    +amount: Decimal
+  }
+
+  enum OrderStatus {
+    NEW
+    IN_PROCESS
+    PACKING
+    SHIPPED
+    DELIVERED
+    CANCELLED
+    RETURN_REQUESTED
+    RETURNED
+  }
+
+  enum ShipmentStatus {
+    NEW
+    IN_TRANSIT
+    DELIVERED
+    LOST
+    CANCELLED
+  }
+
+  enum PaymentStatus {
+    INITIATED
+    AUTHORIZED
+    CAPTURED
+    FAILED
+    REFUNDED
+  }
+
+  Order "1" -- "0..*" OrderItem
+  Order "1" -- "1..*" Shipment
+  Order "1" -- "1..*" Payment
+  Sku "1" -- "0..*" OrderItem
+  Customer "0..1" -- "0..*" Order
+  Address "1" -- "0..*" Order : shippingAddress (snapshot)
+}
+
+package "Support" {
+  class SupportTicket {
+    +id: UUID
+    +customerId: UUID?
+    +orderId: UUID?
+    +status: TicketStatus
+    +channel: String
+    +subject: String
+    +createdAt: DateTime
+  }
+
+  enum TicketStatus {
+    OPEN
+    IN_PROGRESS
+    RESOLVED
+    CLOSED
+  }
+
+  Customer "0..1" -- "0..*" SupportTicket
+  Order "0..1" -- "0..*" SupportTicket
+}
+
+package "Marketing" {
+  class Promotion {
+    +id: UUID
+    +name: String
+    +type: String
+    +validFrom: DateTime
+    +validTo: DateTime
+    +active: Boolean
+  }
+
+  class Coupon {
+    +id: UUID
+    +code: String
+    +maxUsages: Int?
+    +usedCount: Int
+  }
+
+  Promotion "1" -- "0..*" Coupon
+  Promotion "1" -- "0..*" Product
+  Promotion "1" -- "0..*" Category
+  Order "0..*" -- "0..*" Promotion
+}
+
+@enduml

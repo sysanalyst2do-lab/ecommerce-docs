@@ -1,0 +1,76 @@
+@startuml
+left to right direction
+
+actor Customer as C
+actor "Guest" as G
+actor "Support Agent" as SA
+actor "Operator (Backoffice)" as OP
+actor "Marketing Manager" as MM
+actor "Warehouse Staff" as WH
+
+rectangle "E-commerce System" {
+  usecase "Browse Catalog" as UC_BROWSE
+  usecase "Search Products" as UC_SEARCH
+  usecase "View Product Details" as UC_PDP
+  usecase "Manage Cart" as UC_CART
+  usecase "Checkout Order" as UC_CHECKOUT
+  usecase "Track Order Status" as UC_TRACK
+  usecase "Cancel Order" as UC_CANCEL
+  usecase "Request Return" as UC_RETURN
+
+  usecase "Register / Login" as UC_AUTH
+  usecase "Manage Profile & Addresses" as UC_PROFILE
+  usecase "View Order History" as UC_HISTORY
+
+  usecase "Contact Support" as UC_CONTACT_SUPPORT
+  usecase "Handle Support Tickets" as UC_HANDLE_TICKETS
+
+  usecase "Manage Catalog & Prices" as UC_ADMIN_CATALOG
+  usecase "Manage Inventory" as UC_ADMIN_INV
+  usecase "Process Orders" as UC_PROCESS_ORDERS
+
+  usecase "Manage Promotions & Coupons" as UC_PROMO
+  usecase "View Sales & Campaign Reports" as UC_REPORTS
+}
+
+' Связи актёров
+G --> UC_BROWSE
+G --> UC_SEARCH
+G --> UC_PDP
+G --> UC_CART
+G --> UC_CHECKOUT
+
+C --> UC_BROWSE
+C --> UC_SEARCH
+C --> UC_PDP
+C --> UC_CART
+C --> UC_CHECKOUT
+C --> UC_TRACK
+C --> UC_CANCEL
+C --> UC_RETURN
+C --> UC_AUTH
+C --> UC_PROFILE
+C --> UC_HISTORY
+C --> UC_CONTACT_SUPPORT
+
+SA --> UC_HANDLE_TICKETS
+SA --> UC_CONTACT_SUPPORT : create on behalf
+
+OP --> UC_PROCESS_ORDERS
+OP --> UC_ADMIN_INV
+OP --> UC_HANDLE_TICKETS
+OP --> UC_REPORTS
+
+MM --> UC_PROMO
+MM --> UC_REPORTS
+MM --> UC_ADMIN_CATALOG
+
+WH --> UC_ADMIN_INV
+WH --> UC_PROCESS_ORDERS
+
+' Включения/расширения
+UC_CHECKOUT ..> UC_AUTH : <<include>>\n(when customer chooses to register)
+UC_RETURN ..> UC_CONTACT_SUPPORT : <<extend>>
+UC_CANCEL ..> UC_CONTACT_SUPPORT : <<extend>>
+
+@enduml
