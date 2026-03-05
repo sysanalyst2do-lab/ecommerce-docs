@@ -32,7 +32,7 @@ jobs:
 
       - name: Generate PNG diagrams from .puml
         run: |
-          find docs/architecture/c4 -name "*.puml" -print0 | while IFS= read -r -d '' file; do
+          find docs/03-architecture/c4 -name "*.puml" -print0 | while IFS= read -r -d '' file; do
             echo "Rendering $file"
             java -jar plantuml.jar -tpng "$file"
           done
@@ -41,4 +41,4 @@ jobs:
         uses: stefanzweifel/git-auto-commit-action@v5
         with:
           commit_message: "chore(plantuml): update generated diagrams"
-          file_pattern: "docs/architecture/c4/*.png"
+          file_pattern: "docs/03-architecture/c4/*.png"
