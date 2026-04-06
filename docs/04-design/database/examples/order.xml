@@ -1,0 +1,56 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<order>
+  <order_id>ORD-2026-0042</order_id>
+  <created_at>2026-03-05T14:32:07+03:00</created_at>
+  <status>shipped</status>
+  <is_paid>true</is_paid>
+  <comment xsi:nil="true" xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"/>
+
+  <meta>
+    <source>web</source>
+    <ip>192.168.1.100</ip>
+    <tags>
+      <tag>электроника</tag>
+      <tag>промо</tag>
+      <tag>повторный_клиент</tag>
+    </tags>
+  </meta>
+
+  <customer>
+    <id>1023</id>
+    <name>Алексей Петров</name>
+    <email>a.petrov@example.com</email>
+    <phone>+79161234567</phone>
+  </customer>
+
+  <items>
+    <item>
+      <product_id>SKU-1001</product_id>
+      <name>Наушники Sony WH-1000XM5</name>
+      <quantity>1</quantity>
+      <price>32990.00</price>
+      <in_stock>true</in_stock>
+    </item>
+    <item>
+      <product_id>SKU-2045</product_id>
+      <name>Чехол для наушников</name>
+      <quantity>2</quantity>
+      <price>1500.00</price>
+      <in_stock>true</in_stock>
+    </item>
+    <item>
+      <product_id>SKU-3378</product_id>
+      <name>Кабель USB-C 2м</name>
+      <quantity>1</quantity>
+      <price>690.00</price>
+      <in_stock>false</in_stock>
+    </item>
+  </items>
+
+  <payment>
+    <method>card</method>
+    <total>36680.00</total>
+    <currency>RUB</currency>
+    <paid_at>2026-03-05T14:33:12+03:00</paid_at>
+  </payment>
+</order>
