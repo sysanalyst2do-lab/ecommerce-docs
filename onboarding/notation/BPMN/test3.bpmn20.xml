@@ -1,0 +1,163 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<definitions xmlns="http://www.omg.org/spec/BPMN/20100524/MODEL" xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance" xmlns:bpmndi="http://www.omg.org/spec/BPMN/20100524/DI" xmlns:dc="http://www.omg.org/spec/DD/20100524/DC" xmlns:di="http://www.omg.org/spec/DD/20100524/DI" xmlns:flowable="http://flowable.org/bpmn" targetNamespace="http://flowable.org/bpmn20" id="Definitions_Course_4Sessions_Flat">
+  <process id="course4sessions" name="Курс из 4 встреч" isExecutable="false">
+    <!-- Старт курса -->
+    <startEvent id="start" name="Участник зачислен">
+      <outgoing>flow_start_program</outgoing>
+    </startEvent>
+    <!-- Подготовка программы и материалов -->
+    <userTask id="task_prepare_program" name="Сформировать программу курса (4 встречи)">
+      <incoming>flow_start_program</incoming>
+      <outgoing>flow_program_materials</outgoing>
+    </userTask>
+    <userTask id="task_prepare_materials" name="Подготовить материалы и доски">
+      <incoming>flow_program_materials</incoming>
+      <outgoing>flow_materials_onboarding</outgoing>
+    </userTask>
+    <userTask id="task_send_onboarding" name="Разослать онбординг и ссылки на встречи">
+      <incoming>flow_materials_onboarding</incoming>
+      <outgoing>flow_onboarding_session1</outgoing>
+    </userTask>
+    <!-- 4 последовательные встречи -->
+    <userTask id="session_1" name="Встреча 1">
+      <incoming>flow_onboarding_session1</incoming>
+      <outgoing>flow_session1_session2</outgoing>
+    </userTask>
+    <userTask id="session_2" name="Встреча 2">
+      <incoming>flow_session1_session2</incoming>
+      <outgoing>flow_session2_session3</outgoing>
+    </userTask>
+    <userTask id="session_3" name="Встреча 3">
+      <incoming>flow_session2_session3</incoming>
+      <outgoing>flow_session3_session4</outgoing>
+    </userTask>
+    <userTask id="session_4" name="Встреча 4">
+      <incoming>flow_session3_session4</incoming>
+      <outgoing>flow_sessions_feedback</outgoing>
+    </userTask>
+    <!-- Завершение и обратная связь -->
+    <userTask id="task_collect_feedback" name="Собрать обратную связь по курсу">
+      <incoming>flow_sessions_feedback</incoming>
+      <outgoing>flow_feedback_end</outgoing>
+    </userTask>
+    <endEvent id="end" name="Курс завершён">
+      <incoming>flow_feedback_end</incoming>
+    </endEvent>
+    <!-- Потоки -->
+    <sequenceFlow id="flow_start_program" sourceRef="start" targetRef="task_prepare_program"/>
+    <sequenceFlow id="flow_program_materials" sourceRef="task_prepare_program" targetRef="task_prepare_materials"/>
+    <sequenceFlow id="flow_materials_onboarding" sourceRef="task_prepare_materials" targetRef="task_send_onboarding"/>
+    <sequenceFlow id="flow_onboarding_session1" sourceRef="task_send_onboarding" targetRef="session_1"/>
+    <sequenceFlow id="flow_session1_session2" sourceRef="session_1" targetRef="session_2"/>
+    <sequenceFlow id="flow_session2_session3" sourceRef="session_2" targetRef="session_3"/>
+    <sequenceFlow id="flow_session3_session4" sourceRef="session_3" targetRef="session_4"/>
+    <sequenceFlow id="flow_sessions_feedback" sourceRef="session_4" targetRef="task_collect_feedback"/>
+    <sequenceFlow id="flow_feedback_end" sourceRef="task_collect_feedback" targetRef="end"/>
+    <extensionElements>
+      <flowable:executionListener class="Тест "/>
+    </extensionElements>
+    <laneSet id="sid-6e7f40c5-5816-4268-a755-9396546def51">
+      <lane id="sid-38479148-59fb-470b-b0b9-0e271eef8dde">
+        <flowNodeRef>start</flowNodeRef>
+        <flowNodeRef>end</flowNodeRef>
+        <flowNodeRef>task_prepare_program</flowNodeRef>
+        <flowNodeRef>task_prepare_materials</flowNodeRef>
+        <flowNodeRef>task_send_onboarding</flowNodeRef>
+        <flowNodeRef>session_1</flowNodeRef>
+        <flowNodeRef>session_2</flowNodeRef>
+        <flowNodeRef>session_3</flowNodeRef>
+        <flowNodeRef>session_4</flowNodeRef>
+        <flowNodeRef>task_collect_feedback</flowNodeRef>
+        <flowNodeRef>flow_start_program</flowNodeRef>
+        <flowNodeRef>flow_program_materials</flowNodeRef>
+        <flowNodeRef>flow_materials_onboarding</flowNodeRef>
+        <flowNodeRef>flow_onboarding_session1</flowNodeRef>
+        <flowNodeRef>flow_session1_session2</flowNodeRef>
+        <flowNodeRef>flow_session2_session3</flowNodeRef>
+        <flowNodeRef>flow_session3_session4</flowNodeRef>
+        <flowNodeRef>flow_sessions_feedback</flowNodeRef>
+        <flowNodeRef>flow_feedback_end</flowNodeRef>
+      </lane>
+    </laneSet>
+  </process>
+  <!-- Простая DI-разметка под линейную диаграмму -->
+  <bpmndi:BPMNDiagram id="BPMNDiagram_course">
+    <bpmndi:BPMNPlane id="BPMNPlane_course" bpmnElement="sid-f87ed0f5-9906-4e89-8d37-c72a9faff577">
+      <bpmndi:BPMNShape id="start_di" bpmnElement="start">
+        <dc:Bounds x="35.0" y="142.00002" width="36" height="36"/>
+      </bpmndi:BPMNShape>
+      <bpmndi:BPMNShape id="task_prepare_program_di" bpmnElement="task_prepare_program">
+        <dc:Bounds x="152.76733" y="120.0" width="210" height="80"/>
+      </bpmndi:BPMNShape>
+      <bpmndi:BPMNShape id="task_prepare_materials_di" bpmnElement="task_prepare_materials">
+        <dc:Bounds x="390.0" y="120.0" width="210" height="80"/>
+      </bpmndi:BPMNShape>
+      <bpmndi:BPMNShape id="task_send_onboarding_di" bpmnElement="task_send_onboarding">
+        <dc:Bounds x="630.0" y="120.0" width="230" height="80"/>
+      </bpmndi:BPMNShape>
+      <bpmndi:BPMNShape id="session_1_di" bpmnElement="session_1">
+        <dc:Bounds x="900.0" y="120.0" width="140" height="80"/>
+      </bpmndi:BPMNShape>
+      <bpmndi:BPMNShape id="session_2_di" bpmnElement="session_2">
+        <dc:Bounds x="1070.0" y="120.0" width="140" height="80"/>
+      </bpmndi:BPMNShape>
+      <bpmndi:BPMNShape id="session_3_di" bpmnElement="session_3">
+        <dc:Bounds x="1240.0" y="120.0" width="140" height="80"/>
+      </bpmndi:BPMNShape>
+      <bpmndi:BPMNShape id="session_4_di" bpmnElement="session_4">
+        <dc:Bounds x="1410.0" y="120.0" width="140" height="80"/>
+      </bpmndi:BPMNShape>
+      <bpmndi:BPMNShape id="task_collect_feedback_di" bpmnElement="task_collect_feedback">
+        <dc:Bounds x="1600.0" y="120.0" width="210" height="80"/>
+      </bpmndi:BPMNShape>
+      <bpmndi:BPMNShape id="end_di" bpmnElement="end">
+        <dc:Bounds x="1840.0" y="140.0" width="36" height="36"/>
+      </bpmndi:BPMNShape>
+      <bpmndi:BPMNEdge id="flow_start_program_di" bpmnElement="flow_start_program">
+        <di:waypoint x="71.0" y="160.00002"/>
+        <di:waypoint x="152.76733" y="158.0"/>
+      </bpmndi:BPMNEdge>
+      <bpmndi:BPMNEdge id="flow_program_materials_di" bpmnElement="flow_program_materials">
+        <di:waypoint x="362.76733" y="158.0"/>
+        <di:waypoint x="390.0" y="158.0"/>
+      </bpmndi:BPMNEdge>
+      <bpmndi:BPMNEdge id="flow_materials_onboarding_di" bpmnElement="flow_materials_onboarding">
+        <di:waypoint x="600.0" y="158.0"/>
+        <di:waypoint x="630.0" y="158.0"/>
+      </bpmndi:BPMNEdge>
+      <bpmndi:BPMNEdge id="flow_onboarding_session1_di" bpmnElement="flow_onboarding_session1">
+        <di:waypoint x="860.0" y="158.0"/>
+        <di:waypoint x="900.0" y="158.0"/>
+      </bpmndi:BPMNEdge>
+      <bpmndi:BPMNEdge id="flow_session1_session2_di" bpmnElement="flow_session1_session2">
+        <di:waypoint x="1040.0" y="158.0"/>
+        <di:waypoint x="1070.0" y="158.0"/>
+      </bpmndi:BPMNEdge>
+      <bpmndi:BPMNEdge id="flow_session2_session3_di" bpmnElement="flow_session2_session3">
+        <di:waypoint x="1210.0" y="158.0"/>
+        <di:waypoint x="1240.0" y="158.0"/>
+      </bpmndi:BPMNEdge>
+      <bpmndi:BPMNEdge id="flow_session3_session4_di" bpmnElement="flow_session3_session4">
+        <di:waypoint x="1380.0" y="158.0"/>
+        <di:waypoint x="1410.0" y="158.0"/>
+      </bpmndi:BPMNEdge>
+      <bpmndi:BPMNEdge id="flow_sessions_feedback_di" bpmnElement="flow_sessions_feedback">
+        <di:waypoint x="1550.0" y="158.0"/>
+        <di:waypoint x="1600.0" y="158.0"/>
+      </bpmndi:BPMNEdge>
+      <bpmndi:BPMNEdge id="flow_feedback_end_di" bpmnElement="flow_feedback_end">
+        <di:waypoint x="1810.0" y="158.0"/>
+        <di:waypoint x="1840.0" y="158.0"/>
+      </bpmndi:BPMNEdge>
+      <bpmndi:BPMNShape id="shape-a205ee4e-1469-44dc-a6bf-1e7b6589792c" bpmnElement="sid-1cd7b83c-15e4-48a1-b5ac-5fe02bef6d48">
+        <omgdc:Bounds xmlns:omgdc="http://www.omg.org/spec/DD/20100524/DC" x="-345.2" y="108.0" width="2661.4" height="104.0"></omgdc:Bounds>
+      </bpmndi:BPMNShape>
+      <bpmndi:BPMNShape id="shape-b8c1414f-6921-4fcc-a05c-c18eceeb3cd0" bpmnElement="sid-38479148-59fb-470b-b0b9-0e271eef8dde">
+        <omgdc:Bounds xmlns:omgdc="http://www.omg.org/spec/DD/20100524/DC" x="-315.2" y="108.0" width="2771.3372" height="605.8428"></omgdc:Bounds>
+      </bpmndi:BPMNShape>
+    </bpmndi:BPMNPlane>
+  </bpmndi:BPMNDiagram>
+  <collaboration id="sid-f87ed0f5-9906-4e89-8d37-c72a9faff577">
+    <participant id="sid-1cd7b83c-15e4-48a1-b5ac-5fe02bef6d48" processRef="course4sessions" name="Ведущий"/>
+  </collaboration>
+</definitions>

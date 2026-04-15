@@ -1,0 +1,27 @@
+@startuml
+skin rose
+actor Teacher
+actor Student
+participant Chat
+
+Teacher -> Student: Объясняет материал (устно)
+' Ученики слушают — это пассивное действие
+
+loop Во время объяснения
+  Student -> Chat: Пишет вопрос в чат
+end
+
+Teacher -> Student: Продолжает объяснять
+
+Teacher -> Chat: Делает паузу, читает вопросы
+
+loop Отвечает на накопившиеся вопросы
+  Teacher -> Chat: Пишет ответ
+  Chat -> Student: Показывает ответ
+end
+
+loop Параллельно с ответами
+  Student -> Chat: Продолжает писать новые вопросы
+end
+
+@enduml

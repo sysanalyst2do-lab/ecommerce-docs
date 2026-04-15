@@ -1,0 +1,16 @@
+@startuml
+skin rose
+title Пример зваимодействия в трезвенной архитектуре
+actor User
+participant "Browser" as Browser
+participant "Web Server" as WebServer
+participant "DB" as DB
+
+User -> Browser : Открыть страницу товара
+Browser -> WebServer : GET /product/{id}
+WebServer -> DB : SELECT * FROM products WHERE id = ...
+DB --> WebServer : Product data
+WebServer --> Browser : HTML/JSON with product
+Browser --> User : Показать товар
+
+@enduml

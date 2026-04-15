@@ -1,0 +1,24 @@
+@startuml
+skin rose
+skinparam linetype ortho
+
+skinparam defaultFontName "Segoe UI, Arial"
+skinparam defaultFontSize 15
+skinparam shadowing true
+skinparam roundCorner 10
+skinparam ArrowThickness 2
+
+left to right direction
+title  Клиент-серверная архитектура
+
+rectangle "   Client  \n\n\n" as client {
+
+}
+rectangle "  Service  \n\n\n" as service {
+
+}
+
+
+client -[#blue]--> service :  "        Запрос"
+client <-[#green]-- service : Ответ
+@enduml

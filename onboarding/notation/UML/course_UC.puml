@@ -1,0 +1,56 @@
+@startuml
+skin rose
+skinparam Linetype ortho
+title "User Case диаграмма. Курс: роли, лекции и управление вопросами"
+
+actor "Организатор" as Organizer
+actor "Ведущий" as Lecturer
+actor "Ментор курса" as Mentor
+
+' Участник зелёный
+actor "Участник" as Student #palegreen;line:green;text:green
+
+Organizer <|-- Lecturer
+Organizer <|-- Mentor
+
+rectangle "Система курса" {
+
+  package "Лекции и материалы" {
+    (Проходить лекцию) as UC_Lecture
+    (Вести презентацию) as UC_Presentation
+    (Управлять программой\nкурса) as UC_Program
+  }
+
+  package "Управление вопросами" {
+    (Задавать вопросы\nво время лекции) as UC_Ask
+    (Обработать вопрос\nучастника) as UC_HandleQ
+    (Ответить на вопрос\nучастника) as UC_Answer
+  }
+}
+
+' Связи акторов с прецедентами
+
+' Участник: зелёные стрелки
+Student -[#green]-> UC_Lecture
+Student -[#green]-> UC_Ask
+
+' Ведущий
+Lecturer --> UC_Lecture
+Lecturer --> UC_Presentation
+Lecturer --> UC_Program
+Lecturer --> UC_Ask
+Lecturer --> UC_HandleQ
+Lecturer --> UC_Answer
+
+' Ментор
+Mentor --> UC_Answer
+
+' Организатор
+Organizer --> UC_Program
+
+' Взаимосвязи прецедентов
+UC_Lecture --> UC_HandleQ : <<include>>
+UC_HandleQ --> UC_Ask : <<include>>
+UC_HandleQ --> UC_Answer : <<include>>
+
+@enduml

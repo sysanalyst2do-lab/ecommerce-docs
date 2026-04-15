@@ -1,0 +1,19 @@
+@startuml
+skin rose
+
+package "Frontend" {
+
+}
+
+package "Backend" {
+
+}
+
+package "Database" {
+
+}
+
+Frontend --> Backend
+Backend --> Database
+
+@enduml

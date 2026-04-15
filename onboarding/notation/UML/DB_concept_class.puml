@@ -1,0 +1,22 @@
+@startuml
+skin rose
+
+left to right direction
+skinparam classAttributeIconSize 0
+
+class Customer
+class Order
+class OrderItem
+class Product
+
+Customer "1" -- "0..*" Order : creates
+Order "1" *-- "1..*" OrderItem : composition
+OrderItem "0..*" --> "1" Product : refers to
+
+note bottom of OrderItem
+  Ассоциативная сущность:
+  связывает Order и Product,
+  хранит количество и цену на момент покупки
+end note
+
+@enduml

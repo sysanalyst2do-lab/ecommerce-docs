@@ -1,0 +1,15 @@
+@startuml
+actor Client
+actor Server
+activate Client
+Client -> Server: request
+deactivate Client
+activate Server
+
+Client <-- Server: response
+
+deactivate Server
+activate Client
+
+
+@enduml
