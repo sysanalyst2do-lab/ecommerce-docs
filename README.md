@@ -31,7 +31,7 @@
 ## Полезные файлы
 
 - 📋 [Onboarding List](./onboarding/onboardingList.html) — чек-лист помошник для онбординга
-- 📥 [Скачать Onboarding List](https://raw.githubusercontent.com/sysanalyst2do-lab/ecommerce-docs/onboarding/onboarding/onboardingList.html)
+- 📥 [Скачать Onboarding List](https://github.com/sysanalyst2do-lab/ecommerce-docs/raw/onboarding/onboarding/onboardingList.html)
 
 ## Автоматизация
 
