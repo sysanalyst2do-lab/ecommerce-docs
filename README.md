@@ -22,6 +22,11 @@
 2. Изучите [бизнес-требования](./docs/02-requirements/business-requirements.md)
 3. Ознакомьтесь с [архитектурой](./docs/03-architecture/c4/)
 
+## Полезные файлы
+
+- 📋 [Onboarding List](./ONBOARDING_LIST.md) — список материалов для онбординга
+- 📥 [Скачать Onboarding List (raw)](https://raw.githubusercontent.com/sysanalyst2do-lab/ecommerce-docs/onboarding/ONBOARDING_LIST.md)
+
 ## Автоматизация
 
 - C4 диаграммы автоматически генерируются из PlantUML файлов через GitHub Actions

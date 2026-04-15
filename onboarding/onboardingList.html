@@ -1,0 +1,191 @@
+<!DOCTYPE html>
+<html lang="ru">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Онбординг в техническую команду</title>
+    <link rel="preconnect" href="https://fonts.googleapis.com">
+    <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+    <link href="https://fonts.googleapis.com/css2?family=Roboto:wght@400;500;700&display=swap" rel="stylesheet">
+    <style>
+        :root { --dark:#101827; --grey:#6B7280; --pink:#FA2F6B; --blue:#2463EB; --sky:#6AC2EA; --bg-body:#F9FAFB; --bg-card:#FFFFFF; --bg-blue-muted:#C9D7F5; --bg-pink-muted:#F9CCDB; --shadow:0 4px 12px rgba(0,0,0,.06); --radius:16px; }
+        *{margin:0;padding:0;box-sizing:border-box}
+        body{font-family:'Roboto',sans-serif;background:var(--bg-body);color:var(--grey);line-height:1.65;padding:24px 16px;font-weight:400}
+        strong{color:var(--dark);font-weight:700}.container{max-width:760px;margin:0 auto}
+        .header{background:var(--bg-card);border-radius:var(--radius);padding:40px;margin-bottom:32px;box-shadow:var(--shadow);border-top:6px solid var(--blue);text-align:center}
+        .header-pre{color:var(--sky);text-transform:uppercase;font-size:13px;font-weight:700;letter-spacing:1px;margin-bottom:12px}
+        .header-title{font-size:32px;line-height:1.2;color:var(--dark);font-weight:700;margin-bottom:16px}.header-sub{font-size:18px;color:var(--grey);font-weight:400}
+        .tags{display:flex;justify-content:center;gap:8px;margin-top:24px;flex-wrap:wrap}.tag{background:#EEF4FF;color:var(--blue);padding:4px 12px;border-radius:100px;font-size:13px;font-weight:500}
+        .intake-form{margin-top:28px;text-align:left}.form-grid{display:grid;grid-template-columns:repeat(auto-fit,minmax(180px,1fr));gap:12px;margin-bottom:16px}.field{display:flex;flex-direction:column;gap:6px}.field span{font-size:13px;font-weight:700;color:var(--dark);text-transform:uppercase;letter-spacing:.6px}
+        .field input,.field textarea,.custom-task-input{width:100%;border:1px solid #D1D5DB;border-radius:12px;background:#fff;color:var(--dark);padding:12px 14px;font-size:15px;outline:none;font-family:inherit}.field textarea{min-height:110px;resize:vertical}
+        .field input:focus,.field textarea:focus,.custom-task-input:focus{border-color:var(--blue);box-shadow:0 0 0 3px rgba(36,99,235,.12)}
+        .welcome-card{background:linear-gradient(135deg,#EEF4FF 0%,#F9FAFB 100%);border:1px solid #D9E4FF;border-radius:16px;padding:18px 20px}.welcome-label{font-size:12px;text-transform:uppercase;letter-spacing:1px;color:var(--blue);font-weight:700;margin-bottom:6px}.welcome-name{font-size:28px;line-height:1.1;color:var(--dark);font-weight:700;margin-bottom:6px}.welcome-meta{font-size:14px;color:var(--grey)}
+        .actions-panel{margin-top:20px;display:flex;flex-wrap:wrap;gap:12px;align-items:center;justify-content:center}.action-button{border:none;border-radius:12px;background:var(--blue);color:#fff;padding:12px 16px;font-size:14px;font-weight:700;cursor:pointer}.action-button.secondary{background:#fff;color:var(--blue);border:1px solid #D9E4FF}.save-hint{width:100%;font-size:13px;color:var(--grey);text-align:center}.save-status{display:inline-flex;align-items:center;gap:8px;padding:8px 12px;border-radius:999px;background:#F3F4F6;color:var(--dark);font-size:13px;font-weight:500}.save-status-dot{width:10px;height:10px;border-radius:50%;background:#9CA3AF}.save-status.dirty .save-status-dot{background:#FA2F6B}.save-status.clean .save-status-dot{background:#10B981}
+        .section{background:var(--bg-card);border-radius:var(--radius);margin-bottom:20px;box-shadow:var(--shadow);overflow:hidden;transition:transform .2s ease}.section:hover{transform:translateY(-2px)}.section-header{padding:24px;display:flex;align-items:center;cursor:pointer;border-bottom:1px solid transparent}.section.collapsed .section-header{border-bottom:none}
+        .section-icon{width:44px;height:44px;background:#EEF4FF;color:var(--dark);border-radius:12px;display:flex;align-items:center;justify-content:center;font-size:22px;margin-right:16px;flex-shrink:0}.section-title{font-size:20px;font-weight:700;color:var(--dark);flex:1;margin:0}.section-toggle{width:24px;height:24px;display:flex;align-items:center;justify-content:center;color:var(--grey);transition:transform .3s ease}.section.collapsed .section-toggle{transform:rotate(-90deg)}
+        .section-content{padding:0 24px 32px 24px;color:var(--grey);font-size:16px;overflow:hidden;transition:max-height .4s ease-out}.section.collapsed .section-content{max-height:0!important;padding-bottom:0}
+        p{margin-bottom:16px}ul,ol{margin-bottom:24px;padding-left:24px}li{margin-bottom:8px}
+        .box-pink{background:var(--bg-pink-muted);padding:24px;border-radius:12px;margin:24px 0;border-left:4px solid var(--pink)}.box-blue{background:var(--bg-blue-muted);padding:24px;border-radius:12px;margin:24px 0;border-left:4px solid var(--blue)}.box-pink h4,.box-blue h4{color:var(--dark);margin:0 0 8px 0;font-size:16px;display:flex;align-items:center;gap:8px}
+        .quote{font-size:18px;font-style:italic;color:var(--dark);border-left:4px solid var(--sky);padding-left:20px;margin:32px 0}.quote-author{font-size:14px;color:var(--grey);font-style:normal;margin-top:8px;font-weight:500}
+        .reflection-box{margin-top:28px;padding:20px;border-radius:12px;background:#F9FAFB;border:1px solid #E5E7EB}.reflection-title{font-size:13px;text-transform:uppercase;letter-spacing:.8px;color:var(--pink);font-weight:700;margin-bottom:14px}.reflection-grid{display:grid;grid-template-columns:repeat(auto-fit,minmax(220px,1fr));gap:12px;margin-bottom:12px}.reflection-tip{font-size:13px;color:var(--grey);margin-top:8px}
+        .stats{display:grid;grid-template-columns:repeat(auto-fit,minmax(140px,1fr));gap:16px;margin:24px 0}.stat-card{background:var(--bg-body);border-radius:12px;padding:16px;text-align:center;border:1px solid #E5E7EB}.stat-val{font-size:28px;font-weight:700;color:var(--blue);line-height:1.1;margin-bottom:4px}.stat-lbl{font-size:12px;text-transform:uppercase;letter-spacing:.5px;font-weight:700;color:var(--grey)}
+        .checklist{background:var(--bg-card);padding:32px;border-radius:var(--radius);margin-top:40px;box-shadow:var(--shadow);border:2px solid var(--bg-blue-muted)}.chk-title{font-size:24px;font-weight:700;color:var(--dark);margin-bottom:8px}.chk-desc{font-size:14px;margin-bottom:24px}.chk-group-title{font-size:12px;text-transform:uppercase;letter-spacing:1px;color:var(--pink);font-weight:700;margin:24px 0 12px 0}
+        .chk-item{display:flex;gap:16px;padding:12px 0;border-bottom:1px solid #F3F4F6;cursor:pointer;transition:all .2s}.chk-item:hover{opacity:.8}.chk-item:last-child{border-bottom:none}.checkbox{width:22px;height:22px;border:2px solid var(--grey);border-radius:6px;flex-shrink:0;margin-top:2px;position:relative;transition:all .2s}.chk-item.checked .checkbox{background:var(--blue);border-color:var(--blue)}.chk-item.checked .checkbox::after{content:'';position:absolute;left:6px;top:2px;width:5px;height:10px;border:solid #fff;border-width:0 2px 2px 0;transform:rotate(45deg)}.chk-text strong{display:block;font-size:15px;color:var(--dark);transition:color .2s}.chk-item.checked .chk-text strong{color:var(--grey);text-decoration:line-through}.chk-text span{font-size:13px;color:var(--grey)}
+        .custom-tasks{background:var(--bg-card);border-radius:var(--radius);margin-top:24px;padding:24px;box-shadow:var(--shadow);border:2px dashed var(--bg-blue-muted)}.custom-tasks-title{font-size:22px;font-weight:700;color:var(--dark);margin-bottom:8px}.custom-tasks-desc{font-size:14px;margin-bottom:16px}.custom-task-form{display:grid;grid-template-columns:1fr auto;gap:12px;margin-bottom:16px}.custom-task-button{border:none;border-radius:12px;background:var(--blue);color:#fff;padding:12px 16px;font-size:14px;font-weight:700;cursor:pointer}.custom-task-meta{font-size:13px;color:var(--grey);margin-bottom:12px}.custom-task-list{list-style:none;padding-left:0;margin-bottom:0}.custom-task-item{display:flex;align-items:flex-start;justify-content:space-between;gap:12px;padding:12px 0;border-bottom:1px solid #F3F4F6}.custom-task-item:last-child{border-bottom:none}.custom-task-main{display:flex;align-items:flex-start;gap:12px;flex:1;min-width:0}.custom-task-checkbox{margin-top:3px;width:18px;height:18px;accent-color:var(--blue);flex-shrink:0}.custom-task-text{font-size:15px;color:var(--dark);word-break:break-word}.custom-task-text.done{color:var(--grey);text-decoration:line-through}.custom-task-delete{border:none;background:transparent;color:var(--pink);font-size:13px;font-weight:700;cursor:pointer;padding:2px 4px;flex-shrink:0}
+        .footer{text-align:center;padding:40px 0;margin-top:20px;border-top:1px solid #E5E7EB}.footer-logo{font-size:16px;font-weight:700;color:var(--blue);text-decoration:none;display:inline-block;margin-bottom:8px}.footer-time{background:var(--bg-body);display:inline-block;padding:6px 16px;border-radius:20px;font-size:13px;font-weight:500;color:var(--dark);border:1px solid #E5E7EB}
+        @media (max-width:600px){.header{padding:24px;text-align:left}.header-title{font-size:24px}.section-header{padding:16px}.section-icon{width:36px;height:36px;font-size:18px;margin-right:12px}.section-content{padding:0 16px 24px 16px}.custom-task-form{grid-template-columns:1fr}.actions-panel{justify-content:flex-start}}
+    </style>
+</head>
+<body>
+    <div class="container">
+        <header class="header">
+            <div class="header-pre">Чек-лист онбординга</div>
+            <h1 class="header-title">Онбординг в техническую команду</h1>
+            <div class="header-sub">Заполните имя, команду и дату старта — лист персонализируется под нового участника.</div>
+            <div class="intake-form">
+                <div class="form-grid">
+                    <label class="field"><span>Имя</span><input id="personName" type="text" placeholder="Например, Билл Гейтс"></label>
+                    <label class="field"><span>Команда</span><input id="teamName" type="text" placeholder="Например, microsoft team"></label>
+                    <label class="field"><span>Период</span><input id="periodText" type="text" placeholder="Например, 21 апреля - 15 мая 2026"></label>
+                </div>
+                <div class="welcome-card">
+                    <div class="welcome-label">Персональный онбординг</div>
+                    <div class="welcome-name" id="previewName">Новый участник</div>
+                    <div class="welcome-meta" id="previewMeta">Онбординг в техническую команду</div>
+                </div>
+            </div>
+            <div class="actions-panel">
+                <button class="action-button" id="saveHtmlButton" type="button">Сохранить как HTML</button>
+                <button class="action-button secondary" id="resetStateButton" type="button">Очистить форму</button>
+                <div class="save-status dirty" id="saveStatus"><span class="save-status-dot"></span><span id="saveStatusText">Есть несохранённые изменения</span></div><div class="save-hint">Данные записываются внутрь нового HTML-файла после нажатия «Сохранить как HTML».</div>
+            </div>
+            <div class="tags"><span class="tag">#Онбординг</span><span class="tag">#ТехническаяКоманда</span><span class="tag">#СистемныйАнализ</span><span class="tag">#Архитектура</span></div>
+        </header>
+
+        <section class="section"><div class="section-header" onclick="toggleSection(this)"><div class="section-icon">🔍</div><h2 class="section-title">Встреча с системным аналитиком</h2><div class="section-toggle"><svg width="24" height="24" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><polyline points="6 9 12 15 18 9"></polyline></svg></div></div><div class="section-content"><p>Системный аналитик — твой первый проводник в технической команде. На этой встрече вы получите представление о том, </p><div class="box-blue"><h4>💡 Что обсудим</h4><p>Попросите, подумайте <strong>что то</strong>. Уточните, </p></div><p>Ключевые темы для встречи:</p><ul><li><strong>Основы проектирования ИС:</strong> TODO-TODO</li><li><strong>Клиент-серверная архитектура:</strong> TODO-TODO.</li><li><strong>Компоненты системы:</strong> TODO-TODO</li><li><strong>Взаимодействие компонентов системы:</strong> TODO-TODO</li><li><strong>Работа с данными:</strong> TODO-TODO</li></ul><div class="quote">«Лучше один раз показать и обсудить диаграмму, чем 100 раз переписывать ТЗ»<div class="quote-author">— мифы и легенды СА</div></div><div class="reflection-box"><div class="reflection-title">Рефлексия по встрече</div><div class="reflection-grid"><label class="field"><span>Что стало понятнее</span><textarea placeholder="Какие термины, технологии, идеи и тд узнал или стал лучше понимать после встречи?"></textarea></label><label class="field"><span>Что нужно уточнить</span><textarea placeholder="Какие вопросы, артефакты или термины стоит дополнительно разобрать? Одно два дела, которые могу поставить себе в план работ."></textarea></label></div><label class="field"><span>Следующие шаги</span><textarea placeholder="Какие действия я могу сделать после встречи, что уже могу применить на работе?"></textarea></label><div class="reflection-tip">Заполнять в течение дня после разговора, чтобы ничего не забыть.</div></div></div></section>
+
+        <section class="section"><div class="section-header" onclick="toggleSection(this)"><div class="section-icon">🏰</div><h2 class="section-title">Встреча с техническим архитектором</h2><div class="section-toggle"><svg width="24" height="24" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><polyline points="6 9 12 15 18 9"></polyline></svg></div></div><div class="section-content"><p>Технический архитектор покажет вам большую картину, будем мыслить <strong>масштабно</strong> (с разным масштабом и под разными углами смотреть на ИС)</p><div class="box-blue"><h4>🗺️ Архитектурный обзор</h4><p>TODO-TODO</p></div><p>Ключевые темы для встречи:</p><ul><li><strong>Обзор архитектуры:</strong> TODO-TODO</li><li><strong>Технологический стек:</strong> TODO-TODO</li><li><strong>Принципы и ограничения:</strong> TODO-TODO</li></ul><div class="box-pink"><h4>⚡ Важно зафиксировать</h4><p>После встречи обязательно запишите ключевые TODO-TODO</p></div><div class="quote">«Сколько стейкхолдеров, столько и Point of View...»<div class="quote-author">— Взгляд архитектора</div></div><div class="reflection-box"><div class="reflection-title">Рефлексия по встрече</div><div class="reflection-grid"><label class="field"><span>Что стало понятнее</span><textarea placeholder="Какие термины, технологии, идеи и тд узнал или стал лучше понимать после встречи?"></textarea></label><label class="field"><span>Что нужно уточнить</span><textarea placeholder="Какие вопросы, артефакты или термины стоит дополнительно разобрать? Одно два дела, которые могу поставить себе в план работ."></textarea></label></div><label class="field"><span>Следующие шаги</span><textarea placeholder="Какие действия я могу сделать после встречи, что уже могу применить на работе?"></textarea></label><div class="reflection-tip">Заполнять в течение дня после разговора, чтобы ничего не забыть.</div></div></div></section>
+
+        <section class="section"><div class="section-header" onclick="toggleSection(this)"><div class="section-icon">💻</div><h2 class="section-title">Встреча с разработчиком</h2><div class="section-toggle"><svg width="24" height="24" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><polyline points="6 9 12 15 18 9"></polyline></svg></div></div><div class="section-content"><p>Разработчик — ваш партнёр в ежедневной работе. На этой встрече вы погружаетесь в <strong>практическую кухню команды</strong>: как устроен Git-flow, где живёт код, как запустить проект локально и что нужно для первого PR.</p><div class="box-blue"><h4>🔧 Практический онбординг</h4><p>Попросите показать <strong>README проекта</strong> и пройтись по нему вместе. Уточните соглашения команды — код-стайл, naming conventions, правила ревью и нормы по покрытию тестами.</p></div><p>Ключевые темы для встречи:</p><ul><li><strong>Пользовательский путь:</strong> TODO-TODO</li><li><strong>Репозиторий и структура:</strong> Как организован код, где лежат конфиги, тесты, миграции БД и документация.</li><li><strong>Локальный запуск:</strong> Когда мы слышим: "Ничего не знаю - у меня все работает".</li><li><strong>Git-flow и PR-процесс:</strong> Ветки, правила именования коммитов, кто делает ревью и как долго оно занимает.</li><li><strong>CI/CD пайплайн:</strong> Что происходит после мержа — сборка, тесты, деплой. Где смотреть статус пайплайна.</li></ul><div class="reflection-box"><div class="reflection-title">Рефлексия по встрече TODO-TODO</div><div class="reflection-grid"><label class="field"><span>Что уже получилось</span><textarea placeholder="Что удалось попробовать:"></textarea></label><label class="field"><span>Где возникли сложности</span><textarea placeholder="Какие проблемы появились?"></textarea></label></div><label class="field"><span>Какой следующий практический шаг</span><textarea placeholder="Какую задачу я хочу сделать сам?"></textarea></label><div class="reflection-tip">Рефлексия помогает быстро договориться о помощи, если на старте появились блокеры.</div></div><div class="stats"><div class="stat-card"><div class="stat-val">3</div><div class="stat-lbl">Ключевые встречи</div></div><div class="stat-card"><div class="stat-val">1–2</div><div class="stat-lbl">Недели на погружение</div></div><div class="stat-card"><div class="stat-val">1</div><div class="stat-lbl">Первый PR</div></div></div></div></section>
+
+        <div class="checklist"><div class="chk-header"><div class="chk-title">🚀 Чек-лист онбординга</div><div class="chk-desc">Отмечайте выполненные пункты и заполняйте карточку участника прямо в форме выше. Помните про 3 столпа обучения и не забывайти писать рефлексию встречи</div></div>
+            <div class="chk-group-title">Старт и подготовка</div>
+            <div class="chk-item" onclick="toggleCheck(this)"><div class="checkbox"></div><div class="chk-text"><strong>Чек-лист скачан и заполнен</strong><span>Заполнены Имя, команда и период онбординга</span></div></div>
+            <div class="chk-item" onclick="toggleCheck(this)"><div class="checkbox"></div><div class="chk-text"><strong>TODO-TODO Вспомнить имя преподавателя</strong><span>И, конечно, же приготовить для него сложные вопросы.</span></div></div>
+            <div class="chk-item" onclick="toggleCheck(this)"><div class="checkbox"></div><div class="chk-text"><strong>Изучить структуру Wiki</strong><span>TODO-TODO Найти главную страницу проекта, глоссарий и ссылки на ключевые документы.</span></div></div>
+            <div class="chk-item" onclick="toggleCheck(this)"><div class="checkbox"></div><div class="chk-text"><strong>Подготовить и проверить микрофон</strong><span>TODO-TODO Найти главную страницу проекта, глоссарий и ссылки на ключевые документы.</span></div></div>
+            <div class="chk-item" onclick="toggleCheck(this)"><div class="checkbox"></div><div class="chk-text"><strong>Подготовиться к работе с MIRO</strong><span>Открыть ссылку и написать комментарий по шаблону на стикере</span></div></div>
+            <div class="chk-group-title">Встреча с системным аналитиком</div>
+            <div class="chk-item" onclick="toggleCheck(this)"><div class="checkbox"></div><div class="chk-text"><strong>Запланировать встречу с системным аналитиком</strong><span>Поставить встречу в своем календаре, проверить оборудование для работы (микрофон, доступ в MIRO), принести вопросы</span></div></div>
+            <div class="chk-item" onclick="toggleCheck(this)"><div class="checkbox"></div><div class="chk-text"><strong>Прийти на встречу с системным аналитиком</strong><span>TODO-TODO</span></div></div>
+            <div class="chk-item" onclick="toggleCheck(this)"><div class="checkbox"></div><div class="chk-text"><strong>Написать рефлексию по встрече</strong><span>Можно поделиться своими мыслями в чате #рефлексияPE8 и написать вопросы</span></div></div>
+            <div class="chk-item" onclick="toggleCheck(this)"><div class="checkbox"></div><div class="chk-text"><strong>Открыть презентацию 15-20 минут ее изучать</strong><span>Найти ошибки в презентации, найти что нового узнал и что пропустил на занятии и написать вопросы</span></div></div>
+            <div class="chk-item" onclick="toggleCheck(this)"><div class="checkbox"></div><div class="chk-text"><strong>Открыть репозиторий с документацией и 15-20 минут его изучать</strong><span>Найти ключевые документы, которые важны для проектирования сервиса. Составить общее представление структуре репозитория и о том где какую информацию можно найти при необходимости</span></div></div>
+            <div class="chk-group-title">Встреча с техническим архитектором</div>
+            <div class="chk-item" onclick="toggleCheck(this)"><div class="checkbox"></div><div class="chk-text"><strong>Запланировать встречу с техническим архитектором</strong><span>Поставить встречу в своем календаре, проверить оборудование для работы (микрофон, доступ в MIRO), принести вопросы</span></div></div>
+            <div class="chk-item" onclick="toggleCheck(this)"><div class="checkbox"></div><div class="chk-text"><strong>Прийти на встречу с техническим архитектором</strong><span>TODO-TODO</span></div></div>
+            <div class="chk-item" onclick="toggleCheck(this)"><div class="checkbox"></div><div class="chk-text"><strong>Написать рефлексию по встрече</strong><span>Можно поделиться своими мыслями в чате #рефлексияPE8 и написать вопросы</span></div></div>
+            <div class="chk-item" onclick="toggleCheck(this)"><div class="checkbox"></div><div class="chk-text"><strong>Выполнить задание 1 TODO-TODO</strong><span>TODO-TODO</span></div></div>
+            <div class="chk-group-title">Встреча с разработчиком</div>
+            <div class="chk-item" onclick="toggleCheck(this)"><div class="checkbox"></div><div class="chk-text"><strong>Запланировать встречу с разработчиком</strong><span>Поставить встречу в своем календаре, проверить оборудование для работы (микрофон, доступ в MIRO), принести вопросы</span></div></div>
+            <div class="chk-item" onclick="toggleCheck(this)"><div class="checkbox"></div><div class="chk-text"><strong>Прийти на встречу с программистом</strong><span>TODO-TODO</span></div></div>
+            <div class="chk-item" onclick="toggleCheck(this)"><div class="checkbox"></div><div class="chk-text"><strong>Написать рефлексию по встрече</strong><span>Можно поделиться своими мыслями в чате #рефлексияPE8 и написать вопросы</span></div></div>
+            <div class="chk-item" onclick="toggleCheck(this)"><div class="checkbox"></div><div class="chk-text"><strong>Выполнить задание 2 TODO-TODO</strong><span>TODO-TODO</span></div></div>
+            <div style="margin-top:24px;height:6px;background:#F3F4F6;border-radius:3px;overflow:hidden;"><div id="progress" style="width:0%;height:100%;background:var(--blue);transition:width .3s;"></div></div>
+        </div>
+
+        <section class="custom-tasks"><div class="custom-tasks-title">📝 Свои задачи</div><div class="custom-tasks-desc">Добавляйте сюда личные задачи, которые появились по ходу онбординга.</div><form class="custom-task-form" id="customTaskForm"><input id="customTaskInput" class="custom-task-input" type="text" placeholder="Например, пересмотреть запись встречи и выписать термины" maxlength="200"><button type="submit" class="custom-task-button">Добавить задачу</button></form><div class="custom-task-meta" id="customTaskMeta">0 из 0 выполнено</div><ul class="custom-task-list" id="customTaskList"></ul></section>
+
+        <footer class="footer"><div style="margin-bottom:16px;"><span class="footer-time" id="footerGreeting">🎯 Онбординг завершён — добро пожаловать в команду!</span></div><div><a href="#" class="footer-logo">Техническая команда</a></div></footer>
+    </div>
+
+    <script id="embeddedState" type="application/json">{
+  "personName": "",
+  "teamName": "",
+  "periodText": "",
+  "checks": [],
+  "reflections": [],
+  "customTasks": []
+}</script>
+
+    <script>
+        const state = { personName:'', teamName:'', periodText:'', checks:[], reflections:[], customTasks:[], isDirty:false, lastSavedAt:'' };
+
+        function toggleSection(header){ const section=header.closest('.section'); const content=section.querySelector('.section-content'); section.classList.toggle('collapsed'); if(!section.classList.contains('collapsed')) content.style.maxHeight=content.scrollHeight+'px'; else content.style.maxHeight=null; }
+
+        function markDirty(){ state.isDirty = true; updateSaveStatus(); }
+        function markSaved(timestampLabel){ state.isDirty = false; state.lastSavedAt = timestampLabel || ''; updateSaveStatus(); }
+        function updateSaveStatus(){ const box=document.getElementById('saveStatus'); const text=document.getElementById('saveStatusText'); if(!box||!text) return; if(state.isDirty){ box.classList.remove('clean'); box.classList.add('dirty'); text.textContent='Есть несохранённые изменения'; } else { box.classList.remove('dirty'); box.classList.add('clean'); text.textContent = state.lastSavedAt ? `Сохранено: ${state.lastSavedAt}` : 'Изменений нет'; } }
+        function pad(n){ return String(n).padStart(2,'0'); }
+        function buildTimestamp(d){ return `${d.getFullYear()}-${pad(d.getMonth()+1)}-${pad(d.getDate())}_${pad(d.getHours())}-${pad(d.getMinutes())}`; }
+        function buildHumanTimestamp(d){ return `${pad(d.getDate())}.${pad(d.getMonth()+1)}.${d.getFullYear()} ${pad(d.getHours())}:${pad(d.getMinutes())}`; }
+
+        function toggleCheck(item){ item.classList.toggle('checked'); syncChecks(); updateProgress(); markDirty(); }
+        function syncChecks(){ state.checks = Array.from(document.querySelectorAll('.chk-item')).map(i => i.classList.contains('checked')); }
+        function updateProgress(){ const total=document.querySelectorAll('.chk-item').length; const checked=document.querySelectorAll('.chk-item.checked').length; document.getElementById('progress').style.width=(total?(checked/total)*100:0)+'%'; }
+        function updateProfile(){
+            const name=(document.getElementById('personName').value||'').trim();
+            const team=(document.getElementById('teamName').value||'').trim();
+            const period=(document.getElementById('periodText').value||'').trim();
+            state.personName=name; state.teamName=team; state.periodText=period;
+            document.getElementById('previewName').textContent=name||'Новый участник';
+            const meta=[]; meta.push(team?`Онбординг в ${team}`:'Онбординг в техническую команду'); if(period) meta.push(`Период: ${period}`); document.getElementById('previewMeta').textContent=meta.join(' • ');
+            document.getElementById('footerGreeting').textContent = name ? `🎯 ${name}, добро пожаловать в команду!` : '🎯 Онбординг завершён — добро пожаловать в команду!';
+        }
+        function syncReflections(){ state.reflections = Array.from(document.querySelectorAll('.reflection-box textarea')).map(t => t.value || ''); }
+        function bindProfileInputs(){ ['personName','teamName','periodText'].forEach(id => { const el=document.getElementById(id); if(!el) return; el.addEventListener('input', () => { updateProfile(); markDirty(); }); el.addEventListener('change', () => { updateProfile(); markDirty(); }); }); }
+        function bindReflectionInputs(){ document.querySelectorAll('.reflection-box textarea').forEach(ta => { ta.addEventListener('input', () => { syncReflections(); markDirty(); }); ta.addEventListener('change', () => { syncReflections(); markDirty(); }); }); }
+        function escapeHtml(value){ return String(value).replace(/&/g,'&amp;').replace(/</g,'&lt;').replace(/>/g,'&gt;').replace(/"/g,'&quot;').replace(/'/g,'&#039;'); }
+        function updateCustomTaskMeta(){ const done=state.customTasks.filter(task => task.done).length; document.getElementById('customTaskMeta').textContent=`${done} из ${state.customTasks.length} выполнено`; }
+        function renderCustomTasks(){ const list=document.getElementById('customTaskList'); list.innerHTML=state.customTasks.map((task,index)=>`<li class="custom-task-item"><div class="custom-task-main"><input class="custom-task-checkbox" type="checkbox" data-custom-check="${index}" ${task.done?'checked':''}><div class="custom-task-text ${task.done?'done':''}">${escapeHtml(task.text)}</div></div><button type="button" class="custom-task-delete" data-custom-delete="${index}">Удалить</button></li>`).join(''); updateCustomTaskMeta(); }
+        function bindCustomTaskControls(){
+            const form=document.getElementById('customTaskForm'); const input=document.getElementById('customTaskInput'); const list=document.getElementById('customTaskList');
+            form.addEventListener('submit', e => { e.preventDefault(); const value=(input.value||'').trim(); if(!value) return; state.customTasks.push({text:value,done:false}); input.value=''; renderCustomTasks(); markDirty(); });
+            list.addEventListener('change', e => { const checkbox=e.target.closest('[data-custom-check]'); if(!checkbox) return; const index=Number(checkbox.dataset.customCheck); if(Number.isNaN(index)||!state.customTasks[index]) return; state.customTasks[index].done=checkbox.checked; renderCustomTasks(); markDirty(); });
+            list.addEventListener('click', e => { const button=e.target.closest('[data-custom-delete]'); if(!button) return; const index=Number(button.dataset.customDelete); if(Number.isNaN(index)) return; state.customTasks.splice(index,1); renderCustomTasks(); markDirty(); });
+        }
+        function gatherState(){ updateProfile(); syncChecks(); syncReflections(); return { personName:state.personName||'', teamName:state.teamName||'', periodText:state.periodText||'', checks:[...state.checks], reflections:[...state.reflections], customTasks:state.customTasks.map(t => ({ text:t.text, done:!!t.done })) }; }
+        function loadEmbeddedState(){
+            const el=document.getElementById('embeddedState');
+            try{ const data=JSON.parse(el.textContent||'{}'); state.personName=typeof data.personName==='string'?data.personName:''; state.teamName=typeof data.teamName==='string'?data.teamName:''; state.periodText=typeof data.periodText==='string'?data.periodText:''; state.checks=Array.isArray(data.checks)?data.checks:[]; state.reflections=Array.isArray(data.reflections)?data.reflections:[]; state.customTasks=Array.isArray(data.customTasks)?data.customTasks.filter(t => t && typeof t.text==='string').map(t => ({ text:t.text, done:Boolean(t.done) })) : []; }catch{ state.personName=''; state.teamName=''; state.periodText=''; state.checks=[]; state.reflections=[]; state.customTasks=[]; }
+        }
+        function applyStateToUI(){
+            document.getElementById('personName').value=state.personName||'';
+            document.getElementById('teamName').value=state.teamName||'';
+            document.getElementById('periodText').value=state.periodText||'';
+            Array.from(document.querySelectorAll('.chk-item')).forEach((item,index)=>{ item.classList.toggle('checked', !!state.checks[index]); });
+            Array.from(document.querySelectorAll('.reflection-box textarea')).forEach((ta,index)=>{ ta.value=typeof state.reflections[index]==='string'?state.reflections[index]:''; });
+            updateProfile(); updateProgress(); renderCustomTasks();
+        }
+        function downloadTextFile(filename,text){ const blob=new Blob([text],{type:'text/html;charset=utf-8'}); const url=URL.createObjectURL(blob); const a=document.createElement('a'); a.href=url; a.download=filename; document.body.appendChild(a); a.click(); a.remove(); URL.revokeObjectURL(url); }
+        function slugify(text){ return String(text||'').toLowerCase().replace(/[^a-zа-яё0-9]+/gi,'-').replace(/^-+|-+$/g,'').slice(0,60) || 'onboarding'; }
+        function saveAsHtml(){
+            const data=gatherState();
+            const now = new Date();
+            const stamp = buildTimestamp(now);
+            const humanStamp = buildHumanTimestamp(now);
+            const clone=document.documentElement.cloneNode(true);
+            clone.querySelector('#embeddedState').textContent = JSON.stringify(data, null, 2).replace(/</g,'\\u003c').replace(/>/g,'\\u003e').replace(/&/g,'\\u0026');
+            clone.querySelectorAll('input').forEach((input, idx) => {
+                const source = document.querySelectorAll('input')[idx];
+                if (!source) return;
+                if (source.type === 'checkbox') { if (source.checked) input.setAttribute('checked','checked'); else input.removeAttribute('checked'); }
+                else input.setAttribute('value', source.value || '');
+            });
+            clone.querySelectorAll('textarea').forEach((textarea, idx) => { const source = document.querySelectorAll('textarea')[idx]; textarea.textContent = source ? (source.value || '') : ''; });
+            const personPart = slugify(data.personName || 'Без_имени');
+            const filename = `Onboarding_${personPart}_${stamp}.html`;
+            downloadTextFile(filename, '<!DOCTYPE html>\n' + clone.outerHTML);
+            markSaved(humanStamp);
+        }
+        function resetState(){ state.personName=''; state.teamName=''; state.periodText=''; state.checks=[]; state.reflections=[]; state.customTasks=[]; applyStateToUI(); markDirty(); }
+        window.addEventListener('load', () => {
+            document.querySelectorAll('.section-content').forEach(el => { el.style.maxHeight = el.scrollHeight + 'px'; });
+            bindProfileInputs(); bindReflectionInputs(); bindCustomTaskControls(); loadEmbeddedState(); applyStateToUI(); syncChecks(); syncReflections(); updateSaveStatus();
+            document.getElementById('saveHtmlButton').addEventListener('click', saveAsHtml);
+            document.getElementById('resetStateButton').addEventListener('click', resetState);
+        });
+        window.addEventListener('resize', () => { document.querySelectorAll('.section:not(.collapsed) .section-content').forEach(el => { el.style.maxHeight = el.scrollHeight + 'px'; }); });
+    </script>
+</body>
+</html>
