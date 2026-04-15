@@ -2,6 +2,12 @@
 
 Репозиторий технической и бизнес-документации для e-commerce системы.
 
+## Навигация
+
+[Структура](#структура) | [Быстрый старт](#быстрый-старт) | [Полезные файлы](#полезные-файлы) | [Автоматизация](#автоматизация)
+
+Если ты здесь первый раз, не отвлекайся и переходи в [полезные файлы](#полезные-файлы) и скачивай лист онбординга.
+
 ## Структура
 
 Документация организована в директории `docs/` по принципу последовательного изучения:
@@ -24,8 +30,8 @@
 
 ## Полезные файлы
 
-- 📋 [Onboarding List](./ONBOARDING_LIST.md) — список материалов для онбординга
-- 📥 [Скачать Onboarding List (raw)](https://raw.githubusercontent.com/sysanalyst2do-lab/ecommerce-docs/onboarding/ONBOARDING_LIST.md)
+- 📋 [Onboarding List](./onboarding/onboardingList.html) — чек-лист помошник для онбординга
+- 📥 [Скачать Onboarding List](https://raw.githubusercontent.com/sysanalyst2do-lab/ecommerce-docs/onboarding/onboarding/onboardingList.html)
 
 ## Автоматизация
 
