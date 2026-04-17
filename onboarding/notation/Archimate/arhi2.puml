@@ -1,0 +1,41 @@
+@startuml
+skinparam linetype polyline
+left to right direction
+title TOGAF Value Stream - Create Order (E2E)
+
+skinparam rectangle {
+  RoundCorner 10
+  Shadowing false
+}
+
+legend right
+  |= Цвет |= Слой/смысл |
+  |<#FFF2CC>        | Business step (действие пользователя) |
+  |<#D9E1F2>        | Application step (логика приложения) |
+  |<#FCE4D6>        | Technology/Data persistence (БД) |
+endlegend
+
+rectangle "1. Выбор товаров" as S1 #FFF2CC
+rectangle "2. Ввод данных клиента" as S2 #FFF2CC
+rectangle "3. Отправка заказа" as S3 #FFF2CC
+rectangle "4. Валидация и сохранение" as S4 #D9E1F2
+database "5. PostgreSQL\norders/order_items/payments" as S5 #FCE4D6
+rectangle "6. Ответ клиенту (order_id)" as S6 #D9E1F2
+
+S1 --> S2
+S2 --> S3
+S3 --> S4 : HTTP POST /api/v1/orders
+S4 --> S5 : SQL insert
+S5 --> S6 : created_at, order_id
+
+note bottom of S3
+Frontend:
+OrderForm + api/orders.ts
+end note
+
+note bottom of S4
+Backend:
+POST /api/v1/orders
+Pydantic + SQLAlchemy
+end note
+@enduml

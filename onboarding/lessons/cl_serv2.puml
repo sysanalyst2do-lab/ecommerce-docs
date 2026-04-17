@@ -10,14 +10,14 @@ package "Backend" {
   [API Gateway] <<server>>
   [Order Service]
   [User Service]
-  [Payment Service]
+  [**ЕЩЕ 101** \n**Services**]
   [Shard Router] <<component>>
 }
 
 package "Database" {
   database "DB1" as DB1
   database "DB2" as DB2
-  database "DB3" as DB3
+  database "**Много** \n**DB**" as DB3
 }
 
 [Web UI] --> [API Gateway]
@@ -25,11 +25,11 @@ package "Database" {
 
 [API Gateway] --> [Order Service]
 [API Gateway] --> [User Service]
-[API Gateway] --> [Payment Service]
+[API Gateway] --> [**ЕЩЕ 101** \n**Services**]
 
 [Order Service] --> [Shard Router]
 [User Service] --> [Shard Router]
-[Payment Service] --> [Shard Router]
+[**ЕЩЕ 101** \n**Services**] --> [Shard Router]
 
 [Shard Router] --> DB1
 [Shard Router] --> DB2

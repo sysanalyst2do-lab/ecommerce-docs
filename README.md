@@ -33,6 +33,7 @@
 - 📋 [Onboarding List](./onboarding/onboardingList.html) — чек-лист помошник для онбординга
 - 📥 [Скачать Onboarding List](https://github.com/sysanalyst2do-lab/ecommerce-docs/raw/onboarding/onboarding/onboardingList.html)
 
+
 ## Автоматизация
 
 - C4 диаграммы автоматически генерируются из PlantUML файлов через GitHub Actions

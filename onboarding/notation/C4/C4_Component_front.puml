@@ -1,0 +1,48 @@
+@startuml C4_Component_Frontend
+!include https://raw.githubusercontent.com/plantuml-stdlib/C4-PlantUML/master/C4_Component.puml
+
+title Ecommerce Platform - Frontend (C4 Component)
+
+skinparam linetype ortho
+LAYOUT_LEFT_RIGHT()
+
+skinparam defaultFontName Inter
+skinparam componentStyle rectangle
+skinparam ArrowThickness 1
+skinparam WrapWidth 220
+skinparam MaxMessageSize 120
+
+Container_Boundary(front, "Frontend (React + TypeScript + Vite)") {
+  Component(app, "App.tsx", "Root component", "Маршрутизация и сборка страницы из блоков")
+  Component(orderList, "components/OrderList.tsx", "UI component", "Список заказов, фильтры, пагинация")
+  Component(orderDetail, "components/OrderDetail.tsx", "UI component", "Карточка заказа и смена статуса")
+  Component(orderForm, "components/OrderForm.tsx", "UI component", "Создание нового заказа")
+  Component(statusBadge, "components/StatusBadge.tsx", "UI component", "Визуализация статусов заказа")
+
+  Component(apiClient, "api/orders.ts", "HTTP client", "Запросы к backend: list/get/create/update/delete")
+  Component(orderTypes, "types/order.ts", "TypeScript contracts", "Типы Order, DTO и словари статусов")
+}
+
+Container_Ext(backend, "Backend API", "FastAPI", "REST API /api/v1/orders")
+System_Ext(user, "Пользователь", "Работает через браузер")
+
+Rel(user, app, "Открывает интерфейс")
+Rel(app, orderList, "Рендерит")
+Rel(app, orderDetail, "Рендерит")
+Rel(app, orderForm, "Рендерит")
+
+Rel(orderList, apiClient, "fetchOrders()")
+Rel(orderDetail, apiClient, "fetchOrder(), updateStatus(), deleteOrder()")
+Rel(orderForm, apiClient, "createOrder()")
+
+Rel(orderList, orderTypes, "Использует типы")
+Rel(orderDetail, orderTypes, "Использует типы")
+Rel(orderForm, orderTypes, "Использует типы")
+Rel(statusBadge, orderTypes, "STATUS_LABELS/STATUS_COLORS")
+
+Rel(orderList, statusBadge, "Показывает статус заказа")
+Rel(orderDetail, statusBadge, "Показывает статус заказа")
+
+Rel(apiClient, backend, "HTTP JSON (/api/v1/orders...)")
+
+@enduml

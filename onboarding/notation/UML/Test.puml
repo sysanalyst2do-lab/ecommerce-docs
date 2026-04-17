@@ -1,0 +1,69 @@
+@startuml
+!include <archimate/Archimate>
+skinparam linetype ortho
+'left to right direction
+title TOGAF Layered View - Ecommerce Platform
+
+' ---------- Styles ----------
+skinparam rectangle {
+  RoundCorner 10
+  Shadowing false
+}
+legend right
+  |= Слой |= Цвет |
+  | Business | #FFF2CC |
+  | Application | #D9E1F2 |
+  | Data | #E2F0D9 |
+  | Technology | #FCE4D6 |
+endlegend
+
+' ---------- Business ----------
+archimate #FFF2CC "Покупатель" as Customer <<business-actor>>
+archimate #FFF2CC "Администратор/Ведущий" as Admin <<business-actor>>
+archimate #FFF2CC "Управление заказами" as BP_Order <<business-process>>
+archimate #FFF2CC "Демонстрация cookies" as BP_Cookie <<business-process>>
+archimate #FFF2CC "Демонстрация API" as BP_API <<business-process>>
+
+' ---------- Application ----------
+archimate #D9E1F2 "Frontend (React)" as APP_FE <<application-component>>
+archimate #D9E1F2 "Backend API (FastAPI)" as APP_BE <<application-component>>
+archimate #D9E1F2 "Order API Service" as SVC_Order <<application-service>>
+archimate #D9E1F2 "Cookie API Service" as SVC_Cookie <<application-service>>
+archimate #D9E1F2 "Docs UI (/docs,/redoc)" as APP_Docs <<application-component>>
+
+' ---------- Data ----------
+archimate #E2F0D9 "Order DTO" as D_OrderDTO <<data-object>>
+archimate #E2F0D9 "OpenAPI YAML" as D_OAS <<data-object>>
+archimate #E2F0D9 "Order / Payment / Customer" as D_Domain <<business-object>>
+
+' ---------- Technology ----------
+archimate #FCE4D6 "Caddy" as T_Caddy <<node>>
+archimate #FCE4D6 "Frontend container" as T_FE <<node>>
+archimate #FCE4D6 "Backend container" as T_BE <<node>>
+archimate #FCE4D6 "PostgreSQL" as T_DB <<node>>
+
+Customer --> BP_Order
+Admin --> BP_Cookie
+Admin --> BP_API
+
+BP_Order --> SVC_Order : поддерживается
+BP_Cookie --> SVC_Cookie : поддерживается
+BP_API ---> APP_Docs : поддерживается
+
+APP_FE --> SVC_Order : HTTP/JSON
+APP_BE --> SVC_Order : реализует
+APP_BE --> SVC_Cookie : реализует
+APP_Docs --> D_OAS : читает
+
+SVC_Order --> D_OrderDTO
+SVC_Order --> D_Domain
+SVC_Cookie --> D_Domain
+
+T_Caddy --> T_FE
+T_Caddy --> T_BE
+APP_FE --> T_FE : deploy
+APP_BE --> T_BE : deploy
+SVC_Order --> T_DB : SQL
+SVC_Cookie --> T_DB : SQL(косвенно)
+
+@enduml

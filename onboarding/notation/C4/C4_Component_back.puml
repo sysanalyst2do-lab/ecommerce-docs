@@ -1,0 +1,48 @@
+@startuml C4_Component_Backend
+!include https://raw.githubusercontent.com/plantuml-stdlib/C4-PlantUML/master/C4_Component.puml
+
+title Ecommerce Platform - Backend API (C4 Component)
+
+
+LAYOUT_LEFT_RIGHT()
+
+' Доп. читаемость
+skinparam defaultFontName Inter
+skinparam componentStyle rectangle
+skinparam ArrowThickness 1
+skinparam WrapWidth 220
+skinparam MaxMessageSize 120
+
+Container_Boundary(api, "Backend API (FastAPI)") {
+  Component(mainApp, "app.main", "FastAPI app", "Инициализация приложения, middleware, docs/openapi endpoints")
+  Component(ordersRouter, "routers.orders", "APIRouter", "CRUD заказов и смена статуса")
+  Component(cookiesRouter, "routers.cookies", "APIRouter", "Учебные endpoints для cookie")
+  Component(schemas, "schemas.py", "Pydantic models", "DTO и response-схемы")
+  Component(models, "models.py", "SQLAlchemy models", "Order, OrderItem, Payment, Customer")
+  Component(database, "database.py", "DB session provider", "Engine, SessionLocal, get_db()")
+  Component(loggingMw, "HTTP middleware", "Request logging", "Логирование START/END/ERROR, request-id")
+  Component(openapiStatic, "openapi.yaml endpoint", "FileResponse", "Отдача статической спецификации OpenAPI")
+}
+
+ContainerDb(pg, "PostgreSQL", "PostgreSQL 16", "Данные заказов/клиентов/оплат")
+System_Ext(swagger, "Swagger UI / ReDoc", "Читает /openapi.yaml")
+System_Ext(frontend, "Frontend", "Вызывает /api/v1/...")
+
+Rel(frontend, ordersRouter, "GET/POST/PATCH/DELETE /api/v1/orders...", "HTTP JSON")
+Rel(frontend, cookiesRouter, "POST/GET /api/v1/cookies/...", "HTTP JSON")
+
+Rel(mainApp, loggingMw, "Подключает middleware")
+Rel(mainApp, ordersRouter, "include_router()")
+Rel(mainApp, cookiesRouter, "include_router()")
+Rel(mainApp, openapiStatic, "GET /openapi.yaml, /docs, /redoc")
+
+Rel(swagger, openapiStatic, "Запрашивает спецификацию", "HTTP")
+
+Rel(ordersRouter, schemas, "Валидация request/response")
+Rel(cookiesRouter, schemas, "Валидация PreferencesIn")
+Rel(ordersRouter, database, "Depends(get_db)")
+Rel(ordersRouter, models, "ORM операции")
+Rel(database, pg, "SQLAlchemy connection")
+Rel(models, pg, "Таблицы/маппинг")
+
+@enduml

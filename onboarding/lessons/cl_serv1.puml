@@ -9,7 +9,7 @@ package "Backend" {
 
 }
 
-package "Database" {
+database "Database" {
 
 }
 

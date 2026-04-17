@@ -1,0 +1,23 @@
+@startuml C4_Context
+!include https://raw.githubusercontent.com/plantuml-stdlib/C4-PlantUML/master/C4_Context.puml
+
+title Ecommerce Platform - C4 Context
+
+Person(customer, "Пользователь", "Просматривает и оформляет заказы")
+Person(admin, "Администратор/Преподаватель", "Проверяет API, демонстрирует работу системы")
+
+System_Boundary(ecom, "Ecommerce Platform") {
+  System(webApp, "Web Application", "React + TypeScript + Vite")
+  System(api, "Orders API", "Python FastAPI")
+}
+
+SystemDb(pg, "PostgreSQL", "Хранение заказов, клиентов, оплат и связанных данных")
+System_Ext(browserTools, "Swagger/ReDoc", "Документация API через /docs и /redoc")
+
+Rel(customer, webApp, "Работает через браузер", "HTTPS")
+Rel(admin, browserTools, "Изучает и тестирует API", "HTTPS")
+Rel(webApp, api, "Вызывает REST API", "JSON/HTTP")
+Rel(api, pg, "Чтение/запись данных", "SQL")
+Rel(browserTools, api, "Загружает openapi.yaml", "HTTP")
+
+@enduml

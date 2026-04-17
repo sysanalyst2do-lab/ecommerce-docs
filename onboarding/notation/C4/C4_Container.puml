@@ -1,0 +1,12 @@
+@startuml
+!include https://raw.githubusercontent.com/plantuml-stdlib/C4-PlantUML/master/C4_Container.puml
+
+Person(admin, "Мой пользователь")
+System_Boundary(c1, "OMS") {
+    Container(FE, "Frontend", "HTML5, SCC, React", "Отображение заказов \r\n Отображение админки для поддержания данных о товарах и заказах в актуальном состоянии")
+    Container(BE, "Backend", "PHP 8.1", "Обработка логики и данных")
+}
+
+Rel(admin, FE, "Uses", "browser")
+Rel(FE, BE,"Uses", "HTTP API")
+@enduml

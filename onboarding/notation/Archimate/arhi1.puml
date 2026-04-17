@@ -1,0 +1,93 @@
+@startuml
+!include <archimate/Archimate>
+
+title TOGAF Layered View - Ecommerce Platform
+
+' --- Readability tuning ---
+
+skinparam linetype ortho
+skinparam nodesep 50
+skinparam ranksep 40
+skinparam ArrowFontSize 15
+skinparam maxMessageSize 60
+skinparam wrapWidth 90
+
+skinparam rectangle {
+  RoundCorner 10
+  Shadowing false
+}
+
+legend right
+  |= Цвет |= Слой |
+  |<#FFF2CC>        | Business |
+  |<#D9E1F2>        | Application |
+  |<#E2F0D9>        | Data |
+  |<#FCE4D6>        | Technology |
+endlegend
+
+' ---------- Business ----------
+archimate #FFF2CC "Покупатель" as Customer <<business-actor>>
+archimate #FFF2CC "Администратор/Ведущий" as AdminHost <<business-actor>>
+
+archimate #FFF2CC "Управление заказами" as BP_Order <<business-process>>
+archimate #FFF2CC "Демонстрация cookies" as BP_Cookie <<business-process>>
+archimate #FFF2CC "Демонстрация API" as BP_API <<business-process>>
+archimate #FFF2CC "Мониторинг логов" as BP_Logs <<business-process>>
+
+' ---------- Application ----------
+archimate #D9E1F2 "Frontend (React)" as APP_FE <<application-component>>
+archimate #D9E1F2 "Backend API (FastAPI)" as APP_BE <<application-component>>
+archimate #D9E1F2 "Order API Service" as SVC_Order <<application-service>>
+archimate #D9E1F2 "Cookie API Service" as SVC_Cookie <<application-service>>
+archimate #D9E1F2 "Docs UI (/docs,/redoc)" as APP_Docs <<application-component>>
+archimate #D9E1F2 "Dozzle (Logs UI)" as APP_Dozzle <<application-component>>
+
+' ---------- Data ----------
+archimate #E2F0D9 "Order DTO" as D_OrderDTO <<data-object>>
+archimate #E2F0D9 "OpenAPI YAML" as D_OAS <<data-object>>
+archimate #E2F0D9 "Order / Payment / Customer" as D_Domain <<business-object>>
+archimate #E2F0D9 "Container Logs" as D_Logs <<data-object>>
+
+' ---------- Technology ----------
+archimate #FCE4D6 "Caddy" as T_Caddy <<node>>
+archimate #FCE4D6 "Frontend container" as T_FE <<node>>
+archimate #FCE4D6 "Backend container" as T_BE <<node>>
+archimate #FCE4D6 "PostgreSQL" as T_DB <<node>>
+archimate #FCE4D6 "Dozzle container" as T_Dozzle <<node>>
+archimate #FCE4D6 "Docker Socket" as T_DockerSock <<technology-service>>
+
+Customer --> BP_Order
+AdminHost --> BP_Cookie
+AdminHost --> BP_API
+AdminHost --> BP_Logs
+
+BP_Order --> SVC_Order : поддержка
+BP_Cookie --> SVC_Cookie : поддержка
+BP_API --> APP_Docs : поддержка
+BP_Logs --> APP_Dozzle : поддержка
+
+APP_FE --> SVC_Order : HTTP/JSON
+APP_BE --> SVC_Order : реализация
+APP_BE --> SVC_Cookie : реализация
+APP_Docs --> D_OAS : чтение
+APP_Dozzle --> D_Logs : отображение
+
+SVC_Order --> D_OrderDTO
+SVC_Order --> D_Domain
+SVC_Cookie --> D_Domain
+
+T_Caddy --> T_FE
+T_Caddy --> T_BE
+APP_FE --> T_FE : deploy
+APP_BE --> T_BE : deploy
+APP_Dozzle --> T_Dozzle : deploy
+
+SVC_Order --> T_DB : SQL
+SVC_Cookie --> T_DB : SQL
+
+APP_Dozzle --> T_DockerSock : чтение
+T_DockerSock --> T_FE : logs
+T_DockerSock --> T_BE : logs
+T_DockerSock --> T_DB : logs
+
+@enduml
